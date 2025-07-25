@@ -4,7 +4,7 @@ class User:
     self.user_id = user_id
     self.friend_list = friend_list
     self.game_list = game_list
-    self.is_account_private = is_account_private = is_account_private
+    self.is_account_private = is_account_private
 
 def check_privacy_setting(self, user_id, is_account_private):
   pass
