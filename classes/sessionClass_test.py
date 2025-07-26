@@ -1,8 +1,8 @@
 import random
-from .gameClass import Game
-from .stateClass import State
-from .sessionClass import Session
-from ..constants import *
+from classes.gameClass import Game
+from classes.stateClass import State
+from classes.sessionClass import Session
+from constants import *
 
 # --- Helper Function for Test Data ---
 def create_sample_games(num_games):
