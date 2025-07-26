@@ -13,7 +13,7 @@ class Utility:
     def reduce_games_list_from_hours(hours, list_of_games):
         pass
 
-    def get_all_genres_from_games_list(list_of_games):
+    def get_all_tags_from_games_list(list_of_games):
         pass
 
     def get_max_batch(filtered_games):

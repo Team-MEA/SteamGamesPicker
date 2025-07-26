@@ -1,8 +1,8 @@
 class Game:
-    def __init__(self, app_id, name, genres, hours, is_selected=False):
+    def __init__(self, app_id, name, tags, hours, is_selected=False):
         self.app_id = app_id
         self.name = name
-        self.genres = genres
+        self.tags = tags
         self.hours = hours
         self.is_selected = is_selected
 
