@@ -11,5 +11,5 @@ LOWER_MAX_BATCH = 10
 
 SCALING_FACTOR = 10
 
-MIN_BATCH = 3
+MIN_BATCH = 3 #probably not needed anymore, unless we want to implement like a last pick scenario
 
