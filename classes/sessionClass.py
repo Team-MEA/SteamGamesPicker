@@ -1,6 +1,6 @@
 import random
-from stateClass import State
-from constants import MIN_BATCH, UPPER_LIMIT, UPPER_MAX_BATCH, LOWER_LIMIT, LOWER_MAX_BATCH, SCALING_FACTOR
+from .stateClass import State
+from ..constants import UPPER_LIMIT, UPPER_MAX_BATCH, LOWER_LIMIT, LOWER_MAX_BATCH, SCALING_FACTOR
 
 class Session:
     def __init__(self, list_of_games):
@@ -59,11 +59,11 @@ class Session:
             self.history_array.append(new_state)
 
     def undo(self):
-        if self.current_index is not 0:
+        if self.current_index != 0:
             self.current_index -= 1
 
     def redo(self):
-        length = len(self.history_array[self.current_index])
+        length = len(self.history_array)
         if self.current_index < length-1:
             self.current_index += 1
     
