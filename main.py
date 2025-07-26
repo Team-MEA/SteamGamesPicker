@@ -1,5 +1,6 @@
 import tkinter
 from constants import *
+from classes.guiClass import Application
 
 def tksetup(window_root: tkinter.Tk):
   window_root.geometry(f"{SCREEN_WIDTH}x{SCREEN_HEIGHT}")
@@ -13,12 +14,14 @@ def tksetup(window_root: tkinter.Tk):
   button = tkinter.Button(window_root, text="click me", font=('Arial', 18), bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR)
   button.pack()
 
-  window_root.mainloop()
+  
 
 
 def main():
-  window_root = tkinter.Tk()
-  tksetup(window_root)
+  #window_root = tkinter.Tk()
+  #tksetup(window_root)
+  #window_root.mainloop()
+  Application()
 
  
 
