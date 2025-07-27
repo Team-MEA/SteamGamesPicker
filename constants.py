@@ -4,6 +4,7 @@ STEAM_ID_LINK = "https://www.steamidfinder.com/lookup/"
 GAME_TAGS_LINK = "https://www.lorenzostanco.com/lab/steam/u/"
 STEAM_PROFILE_URL = "https://steamcommunity.com/my"
 STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"
+STEAM_RUN_COMMAND = "steam steam://rungameid/"
 
 WEBPAGE_WAIT_TIME = 15
 
