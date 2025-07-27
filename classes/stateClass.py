@@ -1,3 +1,5 @@
+from classes.gameClass import Game
+
 class State:
     """
     Represents a specific snapshot of the game selection process at a given point in time.
@@ -8,7 +10,7 @@ class State:
     selection process has concluded.
     """
 
-    def __init__(self, batch_info):
+    def __init__(self, batch_info: tuple[list[Game], list[Game], list[Game]]) -> None:
         """
         Initializes a new State object.
 
