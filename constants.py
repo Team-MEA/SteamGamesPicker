@@ -15,6 +15,7 @@ MIN_BATCH = 3 #probably not needed anymore, unless we want to implement like a l
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 500
+BORDER_WIDTH = 5
 SCREEN_TITLE = "Steam Game Picker"
 PRIMARY_COLOR = "#282828"
 SECONDARY_COLOR = "#323232"
@@ -27,6 +28,8 @@ HEADER_FONT_SIZE = 25
 SMALL_FONT_SIZE = 10
 TITLE_TEXT_PADDING_Y = 65
 LABEL_PADDING_Y = 15
+GAME_OBJECT_PADDING_Y = LABEL_PADDING_Y * 3
+DISTANCE_FROM_WEST_WALL = 30
 
 STEAM_PROFILE_URL = "https://steamcommunity.com/my"
 STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"
