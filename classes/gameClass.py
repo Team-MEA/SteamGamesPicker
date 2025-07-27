@@ -1,9 +1,10 @@
 class Game:
-    def __init__(self, app_id, name, tags, hours, is_selected=False):
+    def __init__(self, app_id, name, tags, hours = 0, image = None, is_selected=False):
         self.app_id = app_id
         self.name = name
         self.tags = tags
         self.hours = hours
+        self.image = image
         self.is_selected = is_selected
 
     def switch_selection(self):
