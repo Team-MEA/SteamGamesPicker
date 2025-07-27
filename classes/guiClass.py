@@ -4,6 +4,8 @@ from constants import *
 from classes.userClass import User
 from classes.gameClass import Game
 from classes.utilityClass import Utility
+from classes.sessionClass import Session
+from classes.stateClass import State
 from enum import Enum
 import webbrowser
 import os
@@ -15,6 +17,7 @@ class Application_Menu_State(Enum):
     FILTER_GENRE = 4
     SHARED_FRIENDS_GAME_LIST = 5
     PICKER_UI = 6
+    PICKER_UI_CONTINUE = 7
     END_STATE = 99
 
 class Application:
@@ -28,6 +31,8 @@ class Application:
         self.main_user = None
         self.filtered_game_list = None
         self.final_game_result = None
+        self.__session_class = None
+        self.__list_seen_games = []
 
         self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION)
 
@@ -117,8 +122,73 @@ class Application:
         pick_random_game.pack()
         #TODO
         #help_pick. replace command with command=lambda: self.__button_filter_out_genres(self.main_user.game_list)
-        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0)]))
+        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0), Game(698695621, "hog w10arts", ["hog wartz"], 0), Game(621968986, "hog9 warts", ["hog wartz"], 0), Game(62532161, "hog 8warts", ["hog wartz"], 0), Game(412341621, "hog 7warts", ["hog wartz"], 0), Game(62643221, "hog 6warts", ["hog wartz"], 0), Game(62753471, "hog 5warts", ["hog wartz"], 0), Game(6275246421, "hog 4warts", ["hog wartz"], 0), Game(6643643221, "hog w3arts", ["hog wartz"], 0), Game(6232321, "hog 2warts", ["hog wartz"], 0), Game(623321, "hog 1warts", ["hog wartz"], 0)]))
         help_pick.pack(pady=20)
+
+    def __picker_undo(self):
+        self.__session_class.undo()
+        self.__switch_menu_state(Application_Menu_State.PICKER_UI_CONTINUE)
+    def __picker_redo(self):
+        self.__session_class.redo()
+        self.__switch_menu_state(Application_Menu_State.PICKER_UI_CONTINUE)
+    def __picker_reset(self):
+        self.__session_class.reset()
+        self.__switch_menu_state(Application_Menu_State.PICKER_UI)
+
+    def __picker_next(self, checkboxs):
+        for x in checkboxs:
+            if checkboxs[x].get() == True:
+                for y in self.__session_class.history_array[self.__session_class.current_index].batch:
+                    if x == y:
+                        print(y)
+                        y.switch_selection()
+        self.__session_class.confirm()
+        print(f"final pick is {self.__session_class.history_array[self.__session_class.current_index].final_pick}")
+        if self.__session_class.history_array[self.__session_class.current_index].final_pick == True:
+            self.final_game_result = self.__session_class.history_array[self.__session_class.current_index].final_pick
+            self.__switch_menu_state(Application_Menu_State.END_STATE)
+        else:
+            self.__switch_menu_state(Application_Menu_State.PICKER_UI_CONTINUE)
+        
+        
+
+        
+
+
+    def __create_picker_frame(self):
+        info_text = tk.Label(self.current_frame, text="Let us help you narrow down your choice!\nSelect the games you or your friends prefer to play", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        info_text.pack(pady=LABEL_PADDING_Y)
+        
+        right_display = tk.Frame(self.current_frame,  borderwidth=BORDER_WIDTH, background=PRIMARY_COLOR, relief="groove")
+        right_display.pack(side="right", fill="both")
+        redo_button = tk.Button(right_display, text="REDO", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=self.__picker_redo)
+        redo_button.pack()
+        undo_button = tk.Button(right_display, text="UNDO", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=self.__picker_undo)
+        undo_button.pack()
+        reset_button = tk.Button(right_display, text="RESET", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=self.__picker_reset)
+        reset_button.pack()
+
+        left_display = tk.Canvas(self.current_frame, borderwidth=BORDER_WIDTH, background=PRIMARY_COLOR, relief="groove")
+        left_display.pack(side="right", fill="both", expand=True)
+        next_button = tk.Button(right_display, text="next", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__picker_next(checkboxs))
+        next_button.pack(side="bottom")
+
+        
+        current_colm_count = 0
+        current_row_count = 0
+        checkboxs = {}
+        self.__session_class.history_array[self.__session_class.current_index].batch
+        for x in range(len(self.__session_class.history_array[self.__session_class.current_index].batch)):
+            
+            if current_colm_count == GRID_MAX_COLUMS:
+                current_colm_count = 0
+                current_row_count += 1
+            boolean_check = tk.BooleanVar()
+            checkboxs[self.__session_class.history_array[self.__session_class.current_index].batch[x]] = boolean_check
+            selection_bool = tk.Checkbutton(left_display, text=self.__text_cutoff(self.__session_class.history_array[self.__session_class.current_index].batch[x].name), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,)
+            selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news', pady=0)
+            current_colm_count += 1
+        
 
         
     def __create_frame_to_filter_hours(self):
@@ -267,6 +337,8 @@ class Application:
                 self.__init_frame()
                 self.__create_steam_url_frame()
             case Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION:
+                self.__session_class = None
+                self.__list_seen_games = []
                 self.__init_frame()
                 self.__create_game_list_frame()
             case Application_Menu_State.CHOOSE_FRIENDS:
@@ -279,8 +351,12 @@ class Application:
                 self.__init_frame()
                 self.__create_genre_selection_filtering()
             case Application_Menu_State.PICKER_UI:
-                #TODO
-                print("TODO, SET UP THE PICKER GUI")
+                self.__init_frame()
+                self.__session_class = Session(self.filtered_game_list)
+                self.__create_picker_frame()
+            case Application_Menu_State.PICKER_UI_CONTINUE:
+                self.__init_frame()
+                self.__create_picker_frame()
             case Application_Menu_State.SHARED_FRIENDS_GAME_LIST:
                 #TODO
                 print("display games from filteredgames variable in class")
