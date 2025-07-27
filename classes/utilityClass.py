@@ -85,7 +85,30 @@ class Utility:
             if game.hours <= hours:
                 reduced_list.append(game)
         return reduced_list
+    ''' ADAPTING IN PROGRESS
+    @staticmethod
+    def check_privacy_setting(self): # check to see the privacy status of the user profile
+        user_id_link = STEAM_ID_LINK + self.user_id
 
+        response = requests.get(user_id_link, headers=headers)
+        soup = BeautifulSoup(response.text, 'html.parser')    #soup is the whole webpage
+      
+        info_table = soup.find("table", id = "profile-info")
+        if info_table is None:
+            raise Exception("lookup failed, invalid ID")
+        search_string = "profile state"
+
+        table_rows = info_table.find_all("tr")
+        for child in table_rows:
+            if search_string in child.get_text(strip=True).lower():
+                if "public" in child.get_text(strip=True).lower():
+                    self.is_account_private = False   # if both are correct, the profile is private
+                    break
+                else:                               # there is only 2 states, so if it's not public raise an error (friends only also reads as private, and unreachable)
+                    raise Exception("profile is private")
+            else:    
+                raise Exception("lookup failed")
+    '''
     @staticmethod
     def get_all_tags_from_games_list(list_of_games: list[Game]) -> list[str]:
         """
