@@ -13,6 +13,7 @@ class Application_Menu_State(Enum):
     CHOOSE_FRIENDS = 2
     FILTER_HOURS = 3
     FILTER_GENRE = 4
+    SHARED_FRIENDS_GAME_LIST = 5
     END_STATE = 99
 
 class Application:
@@ -131,6 +132,68 @@ class Application:
         random_button = tk.Button(right_display, text="pick_random", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(PLACE_HOLDER_LIST))
         random_button.pack(pady=20)
 
+    def __create_friends_selection(self):
+        info_text = tk.Label(self.current_frame, text="Select friends you want to find common games between", font=self.__font_style_1)
+        info_text.pack()
+        grid_frame = tk.Frame(self.current_frame)
+        grid_frame.pack()
+        checkboxs = {}
+        current_colm_count = 0
+        current_row_count = 0
+        
+        frame_main = tk.Frame(grid_frame, bg="gray")
+        frame_main.grid(sticky='news')
+
+        
+        frame_canvas = tk.Frame(frame_main)
+        frame_canvas.grid(row=2, column=0, pady=(100, 100), sticky='nw')
+        frame_canvas.grid_rowconfigure(0, weight=1)
+        frame_canvas.grid_columnconfigure(0, weight=1)
+        frame_canvas.grid_propagate(False)
+        canvas = tk.Canvas(frame_canvas, bg="yellow")
+        canvas.grid(row=0, column=0, sticky="news")
+        vsb = tk.Scrollbar(frame_canvas, orient="vertical", command=canvas.yview)
+        vsb.grid(row=0, column=1, sticky='ns')
+        canvas.configure(yscrollcommand=vsb.set)
+        frame_buttons = tk.Frame(canvas, bg="blue")
+        canvas.create_window((0, 0), window=frame_buttons, anchor='nw')
+
+        #TODO
+        print("TODO, CHECKLIST WONT FUNCTION UNTIL FRIENDS LIST IS IMPLEMENTED. ADDING FAKE VALUES...")
+        #for loop should go based off len of friends list and instead of meme, display user name. checkboxs[x] instead of x, it should store the name of the friend
+        for x in range(50):
+            if current_colm_count == GRID_MAX_COLUMS:
+                current_colm_count = 0
+                current_row_count += 1
+            boolean_check = tk.BooleanVar()
+            checkboxs[x] = boolean_check
+            selection_bool = tk.Checkbutton(frame_buttons, text=f"meme{x}", variable=boolean_check, font=self.__font_style_1)
+            selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news')
+            current_colm_count += 1
+
+        frame_buttons.update_idletasks()
+        frame_canvas.config(width=500 + vsb.winfo_width(),height=150)
+        canvas.config(scrollregion=canvas.bbox("all"))
+
+        continue_button = tk.Button(self.current_frame, text="continue", command=lambda: self.__sift_through_users_friends_selection(checkboxs))
+        continue_button.pack()
+
+    def __sift_through_users_friends_selection(self, checkboxs):
+        ##TODO
+        #THIS FUCNTION WILL NOT WORK UNTIL USERCLASS IS IMPLEMENTED
+        print("this function will not work until userclass is implmeneted")
+        selected_friends_list = []
+        for x in checkboxs:
+            if checkboxs[x].get() == True:
+                selected_friends_list.append(x)
+        #not great, but im running out of time to midmax this
+        true_selected_friends_list = []
+        for x in self.main_user.friend_list:
+            if x.name in selected_friends_list:
+                true_selected_friends_list.append(x)
+        self.filtered_game_list = Utility.find_common_games(true_selected_friends_list)
+        self.__switch_menu_state(Application_Menu_State.SHARED_FRIENDS_GAME_LIST)
+
     def __create_end_screen(self):
         info_text = tk.Label(self.current_frame, text=f"{self.final_game_result}", font=self.__font_header)
         info_text.pack()
@@ -153,14 +216,17 @@ class Application:
                 self.__init_frame()
                 self.__create_game_list_frame()
             case Application_Menu_State.CHOOSE_FRIENDS:
-                #TODO
-                print("choose friend ui function needs to be implemented")
+                self.__init_frame()
+                self.__create_friends_selection()
             case Application_Menu_State.FILTER_HOURS:
                 self.__init_frame()
                 self.__create_frame_to_filter_hours()
             case Application_Menu_State.FILTER_GENRE:
                 #TODO
                 print("call util for genre list and let user select filters")
+            case Application_Menu_State.SHARED_FRIENDS_GAME_LIST:
+                #TODO
+                print("display games from filteredgames variable in class")
             case Application_Menu_State.END_STATE:
                 self.__init_frame()
                 self.__create_end_screen()
