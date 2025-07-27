@@ -1,7 +1,11 @@
 
-#URLs
+# URLs
 STEAM_ID_LINK = "https://www.steamidfinder.com/lookup/"
 GAME_TAGS_LINK = "https://www.lorenzostanco.com/lab/steam/u/"
+STEAM_PROFILE_URL = "https://steamcommunity.com/my"
+STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"
+
+WEBPAGE_WAIT_TIME = 15
 
 UPPER_LIMIT = 200
 LOWER_LIMIT = 100
@@ -22,6 +26,7 @@ SECONDARY_COLOR = "#323232"
 THIRDARY_COLOR = "#f2f2f2"
 ACENT_COLOR = "#46d39e"
 
+# TEXT
 DEFAULT_FONT = "Arial"
 DEFAULT_FONT_SIZE = 18
 HEADER_FONT_SIZE = 25
@@ -36,7 +41,3 @@ CHECKLIST_MAX_CHAR_LENGTH = 11
 GAME_LIST_FRAM_PADDING = 3
 
 GRID_MAX_COLUMS = 3
-
-STEAM_PROFILE_URL = "https://steamcommunity.com/my"
-STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"
-STEAM_RUN_COMMAND = "steam steam://rungameid/"
