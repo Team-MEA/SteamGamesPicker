@@ -3,8 +3,10 @@ from tkinter import font, Frame, messagebox, ttk
 from constants import *
 from classes.userClass import User
 from classes.gameClass import Game
+from classes.utilityClass import Utility
 from enum import Enum
 import webbrowser
+import os
 class Application_Menu_State(Enum):
     SETUP_STEAM_URL = 0
     DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION = 1
@@ -68,9 +70,7 @@ class Application:
         self.__switch_menu_state(Application_Menu_State.FILTER_HOURS)
 
     def __button_pick_random_game(self, game_list):
-        #TODO
-        print("TODO add funcitonality")
-        #call the utilityclass with provided game_list and get choosen game. set it to self.final_game_result
+        self.final_game_result = Utility.get_random_selection(game_list)
         self.__switch_menu_state(Application_Menu_State.END_STATE)
 
     def __button_filter_out_genres(self, game_list):
@@ -120,13 +120,27 @@ class Application:
         #TODO
         print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
         #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
-        right_display, left_game_display_frame = self.__create_left_andr_right_frames([Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)])
+        PLACE_HOLDER_LIST = [Game(12345, "Counter-Strike", None, 100), Game(45678, "Minecraft", None, 10), Game(621, "hog warts", None, 0)]
+        right_display, left_game_display_frame = self.__create_left_andr_right_frames(PLACE_HOLDER_LIST)
         info_text = tk.Label(right_display, text="Randomly pick a game\nbased off total hours played", font=self.__font_style_1)
         info_text.pack()
         slider = tk.Scale(right_display, from_=0, to=150, orient=tk.HORIZONTAL, length=int(SCREEN_WIDTH/4))
         slider.pack()
-        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: print(slider.get()))
-        help_pick.pack(pady=20)
+        hours_button = tk.Button(right_display, text="pick game within\nselected hours", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(Utility.reduce_games_list_from_hours(slider.get(), PLACE_HOLDER_LIST)))
+        hours_button.pack(pady=20)
+        random_button = tk.Button(right_display, text="pick_random", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(PLACE_HOLDER_LIST))
+        random_button.pack(pady=20)
+
+    def __create_end_screen(self):
+        info_text = tk.Label(self.current_frame, text=f"{self.final_game_result}", font=self.__font_header)
+        info_text.pack()
+        #TODO
+        #i cannot confirm if start_game_button works or not
+        start_game_button = tk.Button(self.current_frame, text="run game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: os.system(f"{STEAM_RUN_COMMAND}{self.final_game_result.app_id}"))
+        start_game_button.pack(pady=20)
+        back_to_main = tk.Button(self.current_frame, text=" go back to main", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION))
+        back_to_main.pack(pady=20)
+
 
     '''Takes a new state enum that represents what the application will be displaying. deletes frame then setup new frame'''
     def __switch_menu_state(self, new_state: Application_Menu_State):
@@ -147,6 +161,9 @@ class Application:
             case Application_Menu_State.FILTER_GENRE:
                 #TODO
                 print("call util for genre list and let user select filters")
+            case Application_Menu_State.END_STATE:
+                self.__init_frame()
+                self.__create_end_screen()
             case _:
                 pass
         pass
