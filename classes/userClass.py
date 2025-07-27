@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 child_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(child_dir, '..'))     # unsure if necesary, seems to only be needed on my setup for some reason, try commenting out and see if it works if anyone uses this
 sys.path.append(parent_dir)
-from constants import STEAM_ID_LINK, GAME_TAGS_LINK
+from constants import STEAM_ID_LINK, GAME_TAGS_LINK, WEBPAGE_WAIT_TIME
 from gameClass import Game
 
 
@@ -22,8 +22,9 @@ headers = {         # scraper does not work without this, this was the auto-comp
 
 
 class User:
-  def __init__(self, user_id, friend_list = [], game_list = [], is_account_private = False, hours_hidden = True, profile_image = None):
+  def __init__(self, user_id, username = "", friend_list = [], game_list = [], is_account_private = True, hours_hidden = True, profile_image = None):
     self.user_id = user_id
+    self.username = username
     self.friend_list = friend_list
     self.game_list = game_list
     self.is_account_private = is_account_private
@@ -33,7 +34,7 @@ class User:
   def __str__(self):
         return self.user_id
 
-  def check_privacy_setting(self): # check to see the privacy status of the user profile
+  def check_user_info(self): # check to see the privacy status of the user profile
     user_id_link = STEAM_ID_LINK + self.user_id
 
     response = requests.get(user_id_link, headers=headers)
@@ -55,7 +56,19 @@ class User:
     else:    
       raise Exception("lookup failed")
     
+    if self.is_account_private == False:    #Only continue if the profile is set to public
+      for row in table_rows:
+        row_text = row.get_text(strip=True).lower()
+        if row_text.startswith("name"):
+          self.username = row_text.split("name")[1].strip()
+          break
+      else:
+        raise Exception("username not found")
     
+    
+
+
+
 
   def get_game_list(self):
     if self.is_account_private == True:   # return error and instructions to set your profile to public
@@ -68,8 +81,7 @@ class User:
     game_list_url = GAME_TAGS_LINK + self.user_id
 
     driver.get(game_list_url)
-    time.sleep(10)
-    #response = requests.get(game_list_url, headers=headers)
+    time.sleep(WEBPAGE_WAIT_TIME)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
 
@@ -116,17 +128,15 @@ class User:
   def get_friend_list(self):
     if self.is_account_private == True:   # return error and instructions to set your profile to public
       raise Exception("profile is private")
-    
+    #TO DO
 
 
-
-def main():
-  moogle = User("76561198032787571")
-  #moogle.check_privacy_setting()
-  moogle.get_game_list()
-  for game in moogle.game_list:
-    print(game.name)
+                #For testing, leave commented
+#def main():
+  #player = User("76561198032787571")
+  #player.check_user_info()
+  #print(player.username)
   
   
-if __name__ == "__main__":
-  main()
+#if __name__ == "__main__":
+  #main()
