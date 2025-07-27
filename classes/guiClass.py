@@ -14,6 +14,7 @@ class Application_Menu_State(Enum):
     FILTER_HOURS = 3
     FILTER_GENRE = 4
     SHARED_FRIENDS_GAME_LIST = 5
+    PICKER_UI = 6
     END_STATE = 99
 
 class Application:
@@ -114,7 +115,9 @@ class Application:
         find_common_games_friends.pack( pady=20)
         pick_random_game = tk.Button(right_display, text="Pick random game from library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_get_hour_selection)
         pick_random_game.pack()
-        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__button_filter_out_genres(self.main_user.game_list))
+        #TODO
+        #help_pick. replace command with command=lambda: self.__button_filter_out_genres(self.main_user.game_list)
+        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0)]))
         help_pick.pack(pady=20)
 
         
@@ -133,18 +136,52 @@ class Application:
         random_button = tk.Button(right_display, text="pick_random", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(PLACE_HOLDER_LIST))
         random_button.pack(pady=20)
 
-    def __create_friends_selection(self):
-        info_text = tk.Label(self.current_frame, text="Select friends you want to find common games between", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+    def __create_genre_selection_filtering(self):
+        info_text = tk.Label(self.current_frame, text="select the genres you want to filter for\nSelect none to skip", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
         info_text.pack(pady=LABEL_PADDING_Y)
-        grid_frame = tk.Frame(self.current_frame)
-        grid_frame.pack()
         checkboxs = {}
         current_colm_count = 0
         current_row_count = 0
+        frame_buttons, frame_canvas, canvas, vsb = self.__create_grid_selection()
+
+        genres_tags = Utility.get_all_tags_from_games_list(self.filtered_game_list)
+
+        for x in range(len(genres_tags)):
+            if current_colm_count == 5:
+                current_colm_count = 0
+                current_row_count += 1
+            boolean_check = tk.BooleanVar()
+            checkboxs[genres_tags[x]] = boolean_check
+            selection_bool = tk.Checkbutton(frame_buttons, text=self.__text_cutoff(genres_tags[x]), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,)
+            selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news', pady=0)
+            current_colm_count += 1
+
+        frame_buttons.update_idletasks()
+        frame_canvas.config(width=500 + vsb.winfo_width(),height=0)
+        canvas.config(scrollregion=canvas.bbox("all"))
+
+        continue_button = tk.Button(self.current_frame, text="continue", bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__sift_through_genres(checkboxs))
+        continue_button.pack()
+
+    def __sift_through_genres(self, checkboxs):
+        selected_genres = []
+        for x in checkboxs:
+            if checkboxs[x].get() == True:
+                selected_genres.append(x)
+        new_filtered_game_list = Utility.reduce_games_list_from_tags(selected_genres, self.filtered_game_list)
+        if len(new_filtered_game_list) == 0:
+            messagebox.showerror(self.current_frame, "No games exist with selected tag(s)")
+        else:
+            self.filtered_game_list = new_filtered_game_list
+            self.__switch_menu_state(Application_Menu_State.PICKER_UI)
+
+
+    def __create_grid_selection(self) ->tuple[tk.Frame, tk.Canvas, tk.Canvas, tk.Scrollbar]:
+        grid_frame = tk.Frame(self.current_frame)
+        grid_frame.pack()
         
         frame_main = tk.Frame(grid_frame, bg=PRIMARY_COLOR)
         frame_main.grid(sticky='news')
-
         
         frame_canvas = tk.Frame(frame_main)
         frame_canvas.grid(row=2, column=0, pady=(CHECKLIST_TOP_Y_PATTING, CHECKLIST_BOTTOM_Y_PATTING), sticky='nw')
@@ -158,7 +195,17 @@ class Application:
         canvas.configure(yscrollcommand=vsb.set)
         frame_buttons = tk.Frame(canvas, bg=SECONDARY_COLOR)
         canvas.create_window((0, 0), window=frame_buttons, anchor='nw')
+        return (frame_buttons,frame_canvas,canvas, vsb) 
 
+    def __create_friends_selection(self):
+        info_text = tk.Label(self.current_frame, text="Select friends you want to find common games between", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        info_text.pack(pady=LABEL_PADDING_Y)
+        checkboxs = {}
+        current_colm_count = 0
+        current_row_count = 0
+
+        frame_buttons, frame_canvas, canvas, vsb = self.__create_grid_selection()
+        
         #TODO
         print("TODO, CHECKLIST WONT FUNCTION UNTIL FRIENDS LIST IS IMPLEMENTED. ADDING FAKE VALUES...")
         #for loop should go based off len of friends list and instead of m, display user name. checkboxs[x] instead of x, it should store the name of the friend
@@ -229,8 +276,11 @@ class Application:
                 self.__init_frame()
                 self.__create_frame_to_filter_hours()
             case Application_Menu_State.FILTER_GENRE:
+                self.__init_frame()
+                self.__create_genre_selection_filtering()
+            case Application_Menu_State.PICKER_UI:
                 #TODO
-                print("call util for genre list and let user select filters")
+                print("TODO, SET UP THE PICKER GUI")
             case Application_Menu_State.SHARED_FRIENDS_GAME_LIST:
                 #TODO
                 print("display games from filteredgames variable in class")
