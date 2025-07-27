@@ -87,17 +87,18 @@ class Application:
         right_display = tk.Frame(self.current_frame,  borderwidth=BORDER_WIDTH, background=PRIMARY_COLOR, relief="groove")
         right_display.pack(side="right", expand=True, fill="both")
         left_game_display_frame = tk.Canvas(self.current_frame, borderwidth=BORDER_WIDTH, background=PRIMARY_COLOR, relief="groove")
-        left_game_display_frame.pack(side="right", fill="both")
+        left_game_display_frame.pack(side="right", fill="both", padx=(GAME_LIST_FRAM_PADDING, 0))
         scroll_bar = ttk.Scrollbar(self.current_frame, orient="vertical", command=left_game_display_frame.yview)
         scroll_bar.pack(side="right", fill=tk.Y)
-        left_game_display_frame.config(yscrollcommand=scroll_bar.set)
+        left_game_display_frame.config(scrollregion=left_game_display_frame.bbox("all"))
+        
 
         try:
             for i in range(len(game_list)):
                 container_for_game_objects = tk.Frame(left_game_display_frame, bg=ACENT_COLOR)
                 left_game_display_frame.create_window(DISTANCE_FROM_WEST_WALL, i * GAME_OBJECT_PADDING_Y, window=container_for_game_objects, height=30, width= int(SCREEN_WIDTH))
                 game_name = tk.Label(container_for_game_objects, text=f"{game_list[i]}")
-                game_name.pack()
+                game_name.pack(padx=25)
         except Exception as e:
             print(f"main_user not yet implemented can load list {e}")
 
