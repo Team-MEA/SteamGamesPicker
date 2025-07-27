@@ -133,50 +133,56 @@ class Application:
         random_button.pack(pady=20)
 
     def __create_friends_selection(self):
-        info_text = tk.Label(self.current_frame, text="Select friends you want to find common games between", font=self.__font_style_1)
-        info_text.pack()
+        info_text = tk.Label(self.current_frame, text="Select friends you want to find common games between", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        info_text.pack(pady=LABEL_PADDING_Y)
         grid_frame = tk.Frame(self.current_frame)
         grid_frame.pack()
         checkboxs = {}
         current_colm_count = 0
         current_row_count = 0
         
-        frame_main = tk.Frame(grid_frame, bg="gray")
+        frame_main = tk.Frame(grid_frame, bg=PRIMARY_COLOR)
         frame_main.grid(sticky='news')
 
         
         frame_canvas = tk.Frame(frame_main)
-        frame_canvas.grid(row=2, column=0, pady=(100, 100), sticky='nw')
+        frame_canvas.grid(row=2, column=0, pady=(CHECKLIST_TOP_Y_PATTING, CHECKLIST_BOTTOM_Y_PATTING), sticky='nw')
         frame_canvas.grid_rowconfigure(0, weight=1)
         frame_canvas.grid_columnconfigure(0, weight=1)
-        frame_canvas.grid_propagate(False)
-        canvas = tk.Canvas(frame_canvas, bg="yellow")
+        frame_canvas.grid_propagate(True)
+        canvas = tk.Canvas(frame_canvas, bg=SECONDARY_COLOR, width=700)
         canvas.grid(row=0, column=0, sticky="news")
         vsb = tk.Scrollbar(frame_canvas, orient="vertical", command=canvas.yview)
         vsb.grid(row=0, column=1, sticky='ns')
         canvas.configure(yscrollcommand=vsb.set)
-        frame_buttons = tk.Frame(canvas, bg="blue")
+        frame_buttons = tk.Frame(canvas, bg=SECONDARY_COLOR)
         canvas.create_window((0, 0), window=frame_buttons, anchor='nw')
 
         #TODO
         print("TODO, CHECKLIST WONT FUNCTION UNTIL FRIENDS LIST IS IMPLEMENTED. ADDING FAKE VALUES...")
-        #for loop should go based off len of friends list and instead of meme, display user name. checkboxs[x] instead of x, it should store the name of the friend
+        #for loop should go based off len of friends list and instead of m, display user name. checkboxs[x] instead of x, it should store the name of the friend
         for x in range(50):
+            temp_name = "m" * x
             if current_colm_count == GRID_MAX_COLUMS:
                 current_colm_count = 0
                 current_row_count += 1
             boolean_check = tk.BooleanVar()
             checkboxs[x] = boolean_check
-            selection_bool = tk.Checkbutton(frame_buttons, text=f"meme{x}", variable=boolean_check, font=self.__font_style_1)
-            selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news')
+            selection_bool = tk.Checkbutton(frame_buttons, text=self.__text_cutoff(temp_name), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,)
+            selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news', pady=0)
             current_colm_count += 1
 
         frame_buttons.update_idletasks()
-        frame_canvas.config(width=500 + vsb.winfo_width(),height=150)
+        frame_canvas.config(width=500 + vsb.winfo_width(),height=0)
         canvas.config(scrollregion=canvas.bbox("all"))
 
-        continue_button = tk.Button(self.current_frame, text="continue", command=lambda: self.__sift_through_users_friends_selection(checkboxs))
+        continue_button = tk.Button(self.current_frame, text="continue", bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__sift_through_users_friends_selection(checkboxs))
         continue_button.pack()
+
+    def __text_cutoff(self,text):
+        if len(text) > CHECKLIST_MAX_CHAR_LENGTH:
+            return (text[:CHECKLIST_MAX_CHAR_LENGTH - 3] + "...")
+        return text
 
     def __sift_through_users_friends_selection(self, checkboxs):
         ##TODO
