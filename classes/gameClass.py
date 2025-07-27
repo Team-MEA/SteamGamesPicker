@@ -1,5 +1,5 @@
 class Game:
-    def __init__(self, app_id, name, tags, hours, is_selected=False):
+    def __init__(self, app_id, name, tags, hours=None, is_selected=False):
         self.app_id = app_id
         self.name = name
         self.tags = tags
@@ -13,9 +13,9 @@ class Game:
             self.is_selected = True
 
     def __eq__(self, other_game):
-        if isinstance(other_game, Game):
-            return self.app_id == other_game.app_id
-        return NotImplementedError
+        if not isinstance(other_game, Game):
+            return NotImplementedError
+        return self.app_id == other_game.app_id
     
     def __str__(self):
         return self.name

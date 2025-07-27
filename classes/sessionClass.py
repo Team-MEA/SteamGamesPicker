@@ -1,5 +1,6 @@
 import random
 from classes.stateClass import State
+from classes.gameClass import Game
 from constants import UPPER_LIMIT, UPPER_MAX_BATCH, LOWER_LIMIT, LOWER_MAX_BATCH, SCALING_FACTOR
 
 class Session:
@@ -7,12 +8,21 @@ class Session:
     Manages the overall game selection process, including historical states
     and the generation of game batches.
     """
-    def __init__(self, list_of_games):
+    def __init__(self, list_of_games: list[Game]) -> None:
         """
         Initializes a new game selection session.
         Args:
             list_of_games (list): The initial list of all games available for selection.
         """
+        if not isinstance(list_of_games, list):
+            raise TypeError("Input 'list_of_games' in Session class must be a list.")
+        if not list_of_games:
+            raise ValueError("The 'list_of_games' cannot be empty. Please re-check your selections.")
+        for i, game in enumerate(list_of_games):
+            if not isinstance(game, Game):
+                raise TypeError(f"All elements in 'list_of_games' in Session class must be instances of the Game class. "
+                                f"Found non-Game element at index {i}: {type(game)}")
+
         self.current_index = 0
         self.starter_list = list(list_of_games) 
         random.shuffle(self.starter_list) 
@@ -20,7 +30,7 @@ class Session:
         self.history_array = [State(self.generate_batch_info(self.starter_list))]
     
     @staticmethod
-    def get_max_batch(games):
+    def get_max_batch(games: list[Game]):
         """
         Determines the maximum batch size based on the total number of games.
         Args:
@@ -36,7 +46,7 @@ class Session:
         else:
             return LOWER_MAX_BATCH
 
-    def generate_batch_info(self, games, seen_games=[]):
+    def generate_batch_info(self, games: list[Game], seen_games: list[Game] = []):
         """
         Recursively generates information for the next batch of games.
         This method manages the core logic of shrinking the batch size,
