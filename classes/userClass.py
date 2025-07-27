@@ -10,9 +10,9 @@ from selenium.webdriver.chrome.options import Options
 child_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(child_dir, '..'))     # unsure if necesary, seems to only be needed on my setup for some reason, try commenting out and see if it works if anyone uses this
 sys.path.append(parent_dir)
+
 from constants import STEAM_ID_LINK, GAME_TAGS_LINK, WEBPAGE_WAIT_TIME
 from gameClass import Game
-
 
 headers = {         # scraper does not work without this, this was the auto-complete but it seems to work
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -22,19 +22,30 @@ headers = {         # scraper does not work without this, this was the auto-comp
 
 
 class User:
-  def __init__(self, user_id, username = "", friend_list = [], game_list = [], is_account_private = True, hours_hidden = True, profile_image = None):
+
+  def __init__(self, user_id: str, name: str, game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
     self.user_id = user_id
-    self.username = username
-    self.friend_list = friend_list
-    self.game_list = game_list
+    self.username = name
+    if game_list is None:
+            self.game_list = self.get_game_list()
+    else:
+       self.game_list = game_list # Needed for Tests
     self.is_account_private = is_account_private
-    self.hours_hidden = hours_hidden
     self.profile_image = profile_image
 
   def __str__(self):
-        return self.user_id
+        """
+        Returns a user-friendly string representation of the User object, which is its name.
+        """
+        return self.name
+  
+  def __repr__(self):
+        """
+        Returns an unambiguous string representation of the User object. By default, it uses the __str__ method.
+        """
+        return self.__str__()
 
-  def check_user_info(self): # check to see the privacy status of the user profile
+  def check_user_info(self): # check to see the privacy status of the user profile    MOVED TO UTILITY CLASS, CAN BE DELETED FROM HERE
     user_id_link = STEAM_ID_LINK + self.user_id
 
     response = requests.get(user_id_link, headers=headers)
