@@ -33,3 +33,4 @@ DISTANCE_FROM_WEST_WALL = 30
 
 STEAM_PROFILE_URL = "https://steamcommunity.com/my"
 STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"
+STEAM_RUN_COMMAND = "steam steam://rungameid/"

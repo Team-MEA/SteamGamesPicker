@@ -2,8 +2,11 @@ import tkinter as tk
 from tkinter import font, Frame, messagebox, ttk
 from constants import *
 from classes.userClass import User
+from classes.gameClass import Game
+from classes.utilityClass import Utility
 from enum import Enum
 import webbrowser
+import os
 class Application_Menu_State(Enum):
     SETUP_STEAM_URL = 0
     DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION = 1
@@ -67,9 +70,7 @@ class Application:
         self.__switch_menu_state(Application_Menu_State.FILTER_HOURS)
 
     def __button_pick_random_game(self, game_list):
-        #TODO
-        print("TODO add funcitonality")
-        #call the utilityclass with provided game_list and get choosen game. set it to self.final_game_result
+        self.final_game_result = Utility.get_random_selection(game_list)
         self.__switch_menu_state(Application_Menu_State.END_STATE)
 
     def __button_filter_out_genres(self, game_list):
@@ -81,18 +82,31 @@ class Application:
         self.current_frame.configure(background=PRIMARY_COLOR)
         self.current_frame.pack(fill=tk.BOTH, expand=True)
 
-    def __create_game_list_frame(self):
+    def __create_left_andr_right_frames(self, game_list) -> tuple[tk.Frame, tk.Canvas]:
         right_display = tk.Frame(self.current_frame,  borderwidth=BORDER_WIDTH, background=PRIMARY_COLOR, relief="groove")
         right_display.pack(side="right", expand=True, fill="both")
         left_game_display_frame = tk.Canvas(self.current_frame, borderwidth=BORDER_WIDTH, background=PRIMARY_COLOR, relief="groove")
         left_game_display_frame.pack(side="right", fill="both")
         scroll_bar = ttk.Scrollbar(self.current_frame, orient="vertical", command=left_game_display_frame.yview)
         scroll_bar.pack(side="right", fill=tk.Y)
-
         left_game_display_frame.config(yscrollcommand=scroll_bar.set)
 
+        try:
+            for i in range(len(game_list)):
+                container_for_game_objects = tk.Frame(left_game_display_frame, bg=ACENT_COLOR)
+                left_game_display_frame.create_window(DISTANCE_FROM_WEST_WALL, i * GAME_OBJECT_PADDING_Y, window=container_for_game_objects, height=30, width= int(SCREEN_WIDTH))
+                game_name = tk.Label(container_for_game_objects, text=f"{game_list[i]}")
+                game_name.pack()
+        except Exception as e:
+            print(f"main_user not yet implemented can load list {e}")
+
+        return right_display, left_game_display_frame
+
+    def __create_game_list_frame(self):
         #TODO
         print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
+        #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
+        right_display, left_game_display_frame = self.__create_left_andr_right_frames([Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)])
         
         find_common_games_friends = tk.Button(right_display, text="Find common games\nwith your friends", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_find_common_friends_games)
         find_common_games_friends.pack( pady=20)
@@ -101,16 +115,32 @@ class Application:
         help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__button_filter_out_genres(self.main_user.game_list))
         help_pick.pack(pady=20)
 
-        try:
-            for i in range(len(self.main_user.game_list)):
-                container_for_game_objects = tk.Frame(left_game_display_frame, bg=ACENT_COLOR)
-                left_game_display_frame.create_window(DISTANCE_FROM_WEST_WALL, i * GAME_OBJECT_PADDING_Y, window=container_for_game_objects, height=30, width= int(SCREEN_WIDTH))
-                game_name = tk.Label(container_for_game_objects, text=f"{self.main_user.game_list[i]}")
-                game_name.pack()
-        except Exception as e:
-            print(f"main_user not yet implemented can load list {e}")
+        
+    def __create_frame_to_filter_hours(self):
+        #TODO
+        print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
+        #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
+        PLACE_HOLDER_LIST = [Game(12345, "Counter-Strike", None, 100), Game(45678, "Minecraft", None, 10), Game(621, "hog warts", None, 0)]
+        right_display, left_game_display_frame = self.__create_left_andr_right_frames(PLACE_HOLDER_LIST)
+        info_text = tk.Label(right_display, text="Randomly pick a game\nbased off total hours played", font=self.__font_style_1)
+        info_text.pack()
+        slider = tk.Scale(right_display, from_=0, to=150, orient=tk.HORIZONTAL, length=int(SCREEN_WIDTH/4))
+        slider.pack()
+        hours_button = tk.Button(right_display, text="pick game within\nselected hours", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(Utility.reduce_games_list_from_hours(slider.get(), PLACE_HOLDER_LIST)))
+        hours_button.pack(pady=20)
+        random_button = tk.Button(right_display, text="pick_random", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(PLACE_HOLDER_LIST))
+        random_button.pack(pady=20)
 
-            
+    def __create_end_screen(self):
+        info_text = tk.Label(self.current_frame, text=f"{self.final_game_result}", font=self.__font_header)
+        info_text.pack()
+        #TODO
+        #i cannot confirm if start_game_button works or not
+        start_game_button = tk.Button(self.current_frame, text="run game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: os.system(f"{STEAM_RUN_COMMAND}{self.final_game_result.app_id}"))
+        start_game_button.pack(pady=20)
+        back_to_main = tk.Button(self.current_frame, text=" go back to main", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION))
+        back_to_main.pack(pady=20)
+
 
     '''Takes a new state enum that represents what the application will be displaying. deletes frame then setup new frame'''
     def __switch_menu_state(self, new_state: Application_Menu_State):
@@ -126,11 +156,14 @@ class Application:
                 #TODO
                 print("choose friend ui function needs to be implemented")
             case Application_Menu_State.FILTER_HOURS:
-                #TODO
-                print("filter hours ui function needs to be implemented")
+                self.__init_frame()
+                self.__create_frame_to_filter_hours()
             case Application_Menu_State.FILTER_GENRE:
                 #TODO
                 print("call util for genre list and let user select filters")
+            case Application_Menu_State.END_STATE:
+                self.__init_frame()
+                self.__create_end_screen()
             case _:
                 pass
         pass

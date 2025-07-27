@@ -1,5 +1,6 @@
-from userClass import User
-from gameClass import Game
+from classes.userClass import User
+from classes.gameClass import Game
+import random
 
 class Utility:    
     
@@ -104,3 +105,8 @@ class Utility:
                 tags_set = tags_set | set(game.tags)
         sorted_tags = sorted(list(tags_set), key=str.lower)
         return sorted_tags
+
+    @staticmethod
+    def get_random_selection(list_of_games: list[Game]) -> Game:
+        random_selection = random.randint(0, len(list_of_games) - 1)
+        return list_of_games[random_selection]
