@@ -1,4 +1,5 @@
 beautifulsoup4
 selenium
-# tkinter is usually included with Python, but if you encounter issues on Linux,
-# you might need to install a system package like 'python3-tk' (e.g., sudo apt-get install python3-tk)
+chromedriver
+chromium
+requests
