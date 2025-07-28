@@ -35,7 +35,7 @@ class Application:
         self.final_game_result = None
         self.__session_class = None
 
-        self.__switch_menu_state(Application_Menu_State.SETUP_STEAM_URL)
+        self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION)
 
         self.master_window.mainloop()
 
@@ -145,9 +145,9 @@ class Application:
         try:
             for i in range(len(game_list)):
                 container_for_game_objects = tk.Frame(left_game_display_frame, bg=ACENT_COLOR)
-                left_game_display_frame.create_window(DISTANCE_FROM_WEST_WALL, i * GAME_OBJECT_PADDING_Y, window=container_for_game_objects, height=30, width= int(SCREEN_WIDTH))
-                game_name = tk.Label(container_for_game_objects, text=f"{game_list[i]}")
-                game_name.pack(padx=25)
+                left_game_display_frame.create_window(DISTANCE_FROM_WEST_WALL, i * GAME_OBJECT_PADDING_Y, window=container_for_game_objects, height=30, width= int(SCREEN_WIDTH), anchor="center")
+                game_name = tk.Label(container_for_game_objects, text=f"{game_list[i]}", font=self.__font_style_1)
+                game_name.pack(padx=25, anchor="center", fill="both")
         except Exception as e:
             print(f"main_user not yet implemented can load list {e}")
 
@@ -158,14 +158,13 @@ class Application:
         print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
         #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
         right_display, left_game_display_frame = self.__create_left_andr_right_frames([Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)])
-        self.current_frame.s .show_frame("AnimationWindow")
-        find_common_games_friends = tk.Button(right_display, text="Find common games\nwith your friends", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_find_common_friends_games)
+        find_common_games_friends = tk.Button(right_display, text="Find common games\nwith your friends", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR,command=self.__button_find_common_friends_games)
         find_common_games_friends.pack( pady=20)
-        pick_random_game = tk.Button(right_display, text="Pick random game from library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_get_hour_selection)
+        pick_random_game = tk.Button(right_display, text="Pick random game from library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=self.__button_get_hour_selection)
         pick_random_game.pack()
         #TODO
         #help_pick. replace command with command=lambda: self.__button_filter_out_genres(self.main_user.game_list)
-        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0), Game(698695621, "hog w10arts", ["hog wartz"], 0), Game(621968986, "hog9 warts", ["hog wartz"], 0), Game(62532161, "hog 8warts", ["hog wartz"], 0), Game(412341621, "hog 7warts", ["hog wartz"], 0), Game(62643221, "hog 6warts", ["hog wartz"], 0), Game(62753471, "hog 5warts", ["hog wartz"], 0), Game(6275246421, "hog 4warts", ["hog wartz"], 0), Game(6643643221, "hog w3arts", ["hog wartz"], 0), Game(6232321, "hog 2warts", ["hog wartz"], 0), Game(623321, "hog 1warts", ["hog wartz"], 0)]))
+        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0), Game(698695621, "hog w10arts", ["hog wartz"], 0), Game(621968986, "hog9 warts", ["hog wartz"], 0), Game(62532161, "hog 8warts", ["hog wartz"], 0), Game(412341621, "hog 7warts", ["hog wartz"], 0), Game(62643221, "hog 6warts", ["hog wartz"], 0), Game(62753471, "hog 5warts", ["hog wartz"], 0), Game(6275246421, "hog 4warts", ["hog wartz"], 0), Game(6643643221, "hog w3arts", ["hog wartz"], 0), Game(6232321, "hog 2warts", ["hog wartz"], 0), Game(623321, "hog 1warts", ["hog wartz"], 0)]))
         help_pick.pack(pady=20)
 
     def __picker_undo(self):
