@@ -5,8 +5,15 @@ STEAM_PROFILE_SIGNATURE_IMG_LINK = "https://www.steamidfinder.com/signature/"
 GAME_TAGS_LINK = "https://www.lorenzostanco.com/lab/steam/u/"
 STEAM_PROFILE_URL = "https://steamcommunity.com/my"
 STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"
+
 STEAM_RUN_COMMAND = "steam steam://rungameid/"
 STEAM_PROFILE_URL_FOR_PARSE = "https://steamcommunity.com/profiles/"
+
+STEAM_ID_URL = "https://steamcommunity.com/profiles/"
+
+ELUX_ID_TEMP = "76561198096871136"
+
+
 
 WEBPAGE_WAIT_TIME = 15
 
