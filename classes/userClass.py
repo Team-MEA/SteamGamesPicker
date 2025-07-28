@@ -12,7 +12,7 @@ parent_dir = os.path.abspath(os.path.join(child_dir, '..'))     # unsure if nece
 sys.path.append(parent_dir)
 
 
-from constants import STEAM_ID_LINK, GAME_TAGS_LINK, WEBPAGE_WAIT_TIME, STEAM_ID_URL, ELUX_ID_TEMP
+from constants import STEAM_ID_LINK, GAME_TAGS_LINK, WEBPAGE_WAIT_TIME, STEAM_ID_URL
 from classes.gameClass import Game
 
 headers = {         # scraper does not work without this, this was the auto-complete but it seems to work
