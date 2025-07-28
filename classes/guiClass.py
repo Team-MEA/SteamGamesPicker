@@ -35,7 +35,7 @@ class Application:
         self.final_game_result = None
         self.__session_class = None
 
-        self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION)
+        self.__switch_menu_state(Application_Menu_State.SETUP_STEAM_URL)
 
         self.master_window.mainloop()
 
@@ -107,9 +107,15 @@ class Application:
             messagebox.showerror(self.current_frame, "URL is required")
             return
         #raise Exception("set up steamAPI interaction to retrieve main user")#TODO
-        #todo call steam api, provide the userinput url and get a mainuser object from steam api.
-        #store mainuser object in self.main_user. if error, or invalid user, showerror
-        #assuming it works. display progressbar
+        #todo get the main users games, then friends
+        steam_id = Utility.get_steamid_from_url(input_box.get())
+        try:
+            self.main_user = Utility.create_user(steam_id,True)
+        except Exception as e:
+            messagebox.showerror(self.current_frame, f"Private account or invalid...\n{e}")
+            self.__switch_menu_state(Application_Menu_State.SETUP_STEAM_URL)
+            return
+        print("valid account")
         self.__create_loading_screen(button_to_disable)
 
     

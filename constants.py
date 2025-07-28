@@ -8,7 +8,7 @@ STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"
 STEAM_RUN_COMMAND = "steam steam://rungameid/"
 STEAM_PROFILE_URL_FOR_PARSE = "https://steamcommunity.com/profiles/"
 
-WEBPAGE_WAIT_TIME = 15
+WEBPAGE_WAIT_TIME = 5
 
 UPPER_LIMIT = 200
 LOWER_LIMIT = 100
