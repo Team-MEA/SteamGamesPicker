@@ -24,7 +24,7 @@ headers = {         # scraper does not work without this, this was the auto-comp
 
 class User:
 
-  def __init__(self, user_id: str, name = "", game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
+  def __init__(self, user_id: str, name: str, game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
     self.user_id = user_id
     self.username = name
     self.game_list = game_list

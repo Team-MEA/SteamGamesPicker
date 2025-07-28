@@ -1,6 +1,5 @@
-from classes.userClass import User
-from classes.mainUserClass import MainUser
-from classes.gameClass import Game
+from userClass import User
+from gameClass import Game
 from constants import STEAM_ID_LINK, STEAM_PROFILE_SIGNATURE_IMG_LINK, STEAM_PROFILE_URL_FOR_PARSE
 import random
 import requests
@@ -151,22 +150,32 @@ class Utility:
         return (user_id, username, is_account_private, signature)
     
     @staticmethod
-    def create_user(user_id, is_main_user=False):
+    def create_main_user(user_id):       # GUI will call this one to create the MainUser
         from mainUserClass import MainUser
         user_info = Utility.get_user_info(user_id)
         id = user_info[0]
         username = user_info[1]
         is_private = user_info[2]
         signature = user_info[3]
-        if is_main_user:
-            if is_private:
-                raise PermissionError("The user account is private, please set it to public and retry. The account status may not update instantly.") 
-            return MainUser(id, username, None, is_private, signature)
-        else:
-            return User(id, username, None, is_private, signature)
+        if is_private:
+            raise PermissionError("The user account is private, please set it to public and retry. The account status may not update instantly.") 
+        return MainUser(id, username, None, is_private, signature)
+        
+    @staticmethod
+    def create_full_users_from_list(list_of_users):        # GUI will call this one to create a list of selected friend Users
+        list_of_full_users = []            
+        for user in list_of_users:
+            user_info = Utility.get_user_info(user.user_id)
+            user.is_private = user_info[2]
+            list_of_full_users.append(user)
+        return list_of_full_users
 
+    @staticmethod
+    def create_user_simple(user_id, name):          # Used when generating a friend list
+        signature = STEAM_PROFILE_SIGNATURE_IMG_LINK + user_id + ".png"
+        return User(user_id, name, None, True, signature)
+    
     @staticmethod
     def get_steamid_from_url(steam_url:str) -> str:
         steamid = steam_url
         steamid = steamid.replace(STEAM_PROFILE_URL_FOR_PARSE, "")
-        return steamid
