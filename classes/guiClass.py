@@ -59,7 +59,7 @@ class Application:
         inputBox = tk.Entry(self.current_frame, width=int(SCREEN_WIDTH/14))
         inputBox.insert(0, STEAM_PLACEHOLDER_URL)
         inputBox.pack(pady=LABEL_PADDING_Y)
-        button = tk.Button(self.current_frame, text="click me", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__button_steam_profile_call(inputBox, button))
+        button = tk.Button(self.current_frame, text="click me", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__button_steam_profile_call(inputBox.get(), button))
         button.pack()
 
 
@@ -89,7 +89,8 @@ class Application:
             self.main_user.game_list = self.main_user.get_game_list()
             #TODO XXX
             #REPLACE THE ABOVE "SELF.SLEEPS()" WITH STEAM SCRAPER API THAT CALLS THE MAIN USER AND SET IT TO SELF.MAIN_USER
-
+            print("finished")
+            self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION)
         bar.pack()
         button.config(state='disabled')
         progress_value = 0
@@ -99,15 +100,15 @@ class Application:
 
 
     def __button_steam_profile_call(self, input_box, button_to_disable):
-        user_input_text = input_box.get()
+        user_input_text = input_box
         if user_input_text == "" or user_input_text == None or user_input_text == STEAM_PLACEHOLDER_URL:
             messagebox.showerror(self.current_frame, "URL is required")
             return
         #raise Exception("set up steamAPI interaction to retrieve main user")#TODO XXX
         #todo get the main users games, then friends
-        steam_id = Utility.get_steamid_from_url(input_box.get())
+        steam_id = Utility.get_steamid_from_url(user_input_text)
         try:
-            self.main_user = Utility.create_user(steam_id,True)
+            self.main_user = Utility.create_main_user(steam_id)
         except Exception as e:
             messagebox.showerror(self.current_frame, f"Private account or invalid...\n{e}")
             self.__switch_menu_state(Application_Menu_State.SETUP_STEAM_URL)
@@ -232,7 +233,7 @@ class Application:
                 current_row_count += 1
             boolean_check = tk.BooleanVar()
             checkboxs[self.__session_class.history_array[self.__session_class.current_index].batch[x]] = boolean_check
-            selection_bool = tk.Checkbutton(left_display, text=self.__text_cutoff(self.__session_class.history_array[self.__session_class.current_index].batch[x].name), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,)
+            selection_bool = tk.Checkbutton(left_display, text=self.__text_cutoff(self.__session_class.history_array[self.__session_class.current_index].batch[x].name), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, selectcolor="black")
             selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news', pady=0)
             current_colm_count += 1
         
@@ -269,7 +270,7 @@ class Application:
                 current_row_count += 1
             boolean_check = tk.BooleanVar()
             checkboxs[genres_tags[x]] = boolean_check
-            selection_bool = tk.Checkbutton(frame_buttons, text=self.__text_cutoff(genres_tags[x]), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,)
+            selection_bool = tk.Checkbutton(frame_buttons, text=self.__text_cutoff(genres_tags[x]), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,selectcolor="black")
             selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news', pady=0)
             current_colm_count += 1
 
@@ -333,7 +334,7 @@ class Application:
                 current_row_count += 1
             boolean_check = tk.BooleanVar()
             checkboxs[temp_name] = boolean_check
-            selection_bool = tk.Checkbutton(frame_buttons, text=self.__text_cutoff(temp_name), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,)
+            selection_bool = tk.Checkbutton(frame_buttons, text=self.__text_cutoff(temp_name), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,selectcolor="black")
             selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news', pady=0)
             current_colm_count += 1
 
@@ -348,9 +349,18 @@ class Application:
         if len(text) > CHECKLIST_MAX_CHAR_LENGTH:
             return (text[:CHECKLIST_MAX_CHAR_LENGTH - 3] + "...")
         return text
+    
+    def __friends_filtered_list(self):
+
+        right_display, left_game_display_frame = self.__create_left_andr_right_frames(self.filtered_game_list)
+        pick_random_game = tk.Button(right_display, text="Pick random game\nfrom shared library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=lambda: self.__button_pick_random_game(self.filtered_game_list))
+        pick_random_game.pack()
+        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=lambda: self.__button_filter_out_genres(self.filtered_game_list ))
+        help_pick.pack(pady=60)
+
 
     def __sift_through_users_friends_selection(self, checkboxs):
-        ##TODO
+        ##TODO XXX
         #THIS FUCNTION WILL NOT WORK UNTIL USERCLASS IS IMPLEMENTED
         print("this function will not work until userclass is implmeneted")
         selected_friends_list = []
@@ -361,10 +371,14 @@ class Application:
         true_selected_friends_list = []
         for x in self.main_user.friend_list:
             if x.username in selected_friends_list:
+                print(f"{x.username} was selected")
+                x.get_games_list_quick()
                 true_selected_friends_list.append(x)
+                
         #TODO
         #generate friends games then look for common games
-        self.filtered_game_list = Utility.find_common_games(true_selected_friends_list)
+        
+        self.filtered_game_list = Utility.find_common_games(self.main_user, true_selected_friends_list)
         self.__switch_menu_state(Application_Menu_State.SHARED_FRIENDS_GAME_LIST)
 
     def __create_end_screen(self):
@@ -409,8 +423,8 @@ class Application:
                 self.__init_frame()
                 self.__create_picker_frame()
             case Application_Menu_State.SHARED_FRIENDS_GAME_LIST:
-                #TODO
-                print("display games from filteredgames variable in class")
+                self.__init_frame()
+                self.__friends_filtered_list()
             case Application_Menu_State.END_STATE:
                 self.__init_frame()
                 self.__create_end_screen()
