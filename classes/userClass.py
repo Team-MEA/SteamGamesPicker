@@ -52,7 +52,7 @@ class User:
 
     games = soup.find_all("game")
 
-
+    new_game_list = []
 
     for game in games:
         new_game_list.append(Game(game.find("appID").text.strip(), game.find("name").text.strip()))

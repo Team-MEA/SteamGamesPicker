@@ -33,7 +33,6 @@ class Utility:
         for x in range(0, len(selected_friends)):
             if selected_friends[x].is_account_private or len(selected_friends[x].game_list) == 0:
                 continue
-            print(f"games_shared is now: {games_shared_with_friends}")
             games_shared_with_friends = games_shared_with_friends.intersection(selected_friends[x].game_list)
             if not games_shared_with_friends:
                 break # Exits the loop early for efficiency
