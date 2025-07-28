@@ -152,6 +152,7 @@ class Utility:
     
     @staticmethod
     def create_user(user_id, is_main_user=False):
+        from mainUserClass import MainUser
         user_info = Utility.get_user_info(user_id)
         id = user_info[0]
         username = user_info[1]

@@ -2,13 +2,13 @@ import os
 import requests
 import sys
 import time
-from classes.userClass import User
-from classes.gameClass import Game
-from classes.utilityClass import Utility
+from userClass import User
+from gameClass import Game
+from utilityClass import Utility
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK
+from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK, ELUX_ID_TEMP, STEAM_ID_URL
 
 headers = {         # scraper does not work without this, this was the auto-complete but it seems to work
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -19,7 +19,7 @@ class MainUser(User):
     Represents the primary user of the application, inheriting from the User class.
     This class adds a friend_list and custom behavior for generating its game list.
     """
-    def __init__(self, user_id: str, name: str, game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
+    def __init__(self, user_id: str, name = "", game_list: list[Game] = None, is_account_private: bool = False, profile_image: str = None) -> None:
         super().__init__(user_id = user_id,
                          name = name,
                          game_list = game_list, # Needed for Tests
@@ -28,13 +28,6 @@ class MainUser(User):
         if game_list is None:
             self.game_list = self.get_game_list()
         self.friend_list = self.get_friend_list()
-
-    def get_game_list(self) -> list[Game]:
-        """
-        Overrides the get_game_list method from the User class.
-        Returns a list of Game objects with the following fields: app_id, name, tags, hours, image.
-        """
-        pass 
 
     def get_friend_list(self) -> list[User]:
         """
@@ -45,15 +38,19 @@ class MainUser(User):
 
         if self.is_account_private == True:   # return error and instructions to set your profile to public
             raise Exception("profile is private")
-        friends_list_link = STEAM_PROFILE_URL + self.user_id + "/friends/"
+        friends_list_link = STEAM_ID_URL + self.user_id + "/friends/"
 
         response = requests.get(friends_list_link, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')    #soup is the whole webpage
 
-        for friend in soup.find_all("div", class_="data-steamid"):
-           steam_id = friend["data-steamid"]
-           new_friend = Utility.create_user(steam_id)
-           friend_users.append(new_friend)
+        for friend in soup.find_all("div", class_="friend_block_v2"):
+          steam_id = friend.get("data-steamid")
+
+          name_tag = friend.find("div", class_= "friend_block_content")
+          display_name = name_tag.contents[0].strip()
+
+          new_friend = Utility.create_user_simple(steam_id, name=display_name)
+          friend_users.append(new_friend)
         
         return friend_users
 
@@ -62,10 +59,11 @@ class MainUser(User):
     def get_game_list(self):
         if self.is_account_private == True:   # return error and instructions to set your profile to public
           raise Exception('profile is private')
+        games_list = []
         
         options = Options()
         options.add_argument("--headless")
-        driver = webdriver.Chrome(options=options) # this and 2 lines above it are meant to keep the webpage from popping up, doesn't seem to be working though
+        driver = webdriver.Chrome(options=options)
 
         game_list_url = GAME_TAGS_LINK + self.user_id
 
@@ -108,6 +106,17 @@ class MainUser(User):
           image_url = header_img_tag.get('src') if header_img_tag else None
 
           game = Game(app_id, name, game_tag_list, hours, image_url)
-          self.game_list.append(game)
+          games_list.append(game)
+        return games_list
 
-            
+
+
+'''            
+def main():
+  print("Creating MainUser...")
+  player = MainUser(ELUX_ID_TEMP)
+  print("MainUser created.")
+  
+if __name__ == "__main__":
+  main()
+'''
