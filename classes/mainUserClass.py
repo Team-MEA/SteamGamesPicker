@@ -19,7 +19,7 @@ class MainUser(User):
     Represents the primary user of the application, inheriting from the User class.
     This class adds a friend_list and custom behavior for generating its game list.
     """
-    def __init__(self, user_id: str, name = "", game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
+    def __init__(self, user_id: str, name = "", game_list: list[Game] = None, is_account_private: bool = False, profile_image: str = None) -> None:
         super().__init__(user_id = user_id,
                          name = name,
                          game_list = game_list, # Needed for Tests
@@ -43,8 +43,8 @@ class MainUser(User):
         response = requests.get(friends_list_link, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')    #soup is the whole webpage
 
-        for friend in soup.find_all("div", class_="data-steamid"):
-           steam_id = friend["data-steamid"]
+        for friend in soup.find_all("div", class_="friend_block_v2"):
+           steam_id = friend.get("data-steamid")
            new_friend = Utility.create_user(steam_id)
            friend_users.append(new_friend)
         
