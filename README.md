@@ -15,10 +15,10 @@ Sometimes picking a game can be difficult! This program is designed to help narr
 
 ## 📱 Features:
 
-*   **Intelligent Batch Generation**: Dynamically creates batches of games, reducing the number of choices as you progress.
+*   **Intelligent Batch Generation**: Dynamically creates batches of games, reducing the number of choices after each selection.
 *   **Interactive Filtering**:
     *   **Finds common games** shared with selected friends.
-    *   **Hard filters** by multiple tags, ensuring games possess *all* specified genres or characteristics.
+    *   **Steam filters** by multiple tags, ensuring games possess *all* specified genres or characteristics.
     *   **Filters by playtime**, helping you discover quick sessions or epic sagas.
 *   **Comprehensive Tag Extraction**: Automatically gathers all unique tags from your game library for easy filtering options.
 *   **Robust State Management (Undo/Redo)**: Never fear a wrong decision! The app maintains a full history of your filtering process, allowing you to freely undo and redo steps until you find your ideal game.
