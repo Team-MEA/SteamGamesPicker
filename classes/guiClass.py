@@ -62,8 +62,6 @@ class Application:
         button = tk.Button(self.current_frame, text="click me", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__button_steam_profile_call(inputBox, button))
         button.pack()
 
-    def sleeps(self):
-        time.sleep(WEBPAGE_WAIT_TIME)
 
     def __create_loading_screen(self, button):
         bar = ttk.Progressbar(self.current_frame, orient="horizontal", length=300, mode="determinate", maximum=100)
@@ -88,10 +86,9 @@ class Application:
                 ))
 
         def do_fetch():
-            self.sleeps()
-            #TODO
+            self.main_user.game_list = self.main_user.get_game_list()
+            #TODO XXX
             #REPLACE THE ABOVE "SELF.SLEEPS()" WITH STEAM SCRAPER API THAT CALLS THE MAIN USER AND SET IT TO SELF.MAIN_USER
-            print("TODO: IMPLEMENT STEAM API SCRAPER")
 
         bar.pack()
         button.config(state='disabled')
@@ -106,7 +103,7 @@ class Application:
         if user_input_text == "" or user_input_text == None or user_input_text == STEAM_PLACEHOLDER_URL:
             messagebox.showerror(self.current_frame, "URL is required")
             return
-        #raise Exception("set up steamAPI interaction to retrieve main user")#TODO
+        #raise Exception("set up steamAPI interaction to retrieve main user")#TODO XXX
         #todo get the main users games, then friends
         steam_id = Utility.get_steamid_from_url(input_box.get())
         try:
@@ -160,17 +157,17 @@ class Application:
         return right_display, left_game_display_frame
 
     def __create_game_list_frame(self):
-        #TODO
+        #TODO XXX
         print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
         #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
-        right_display, left_game_display_frame = self.__create_left_andr_right_frames([Game(12345, "Counter-Strike 2", None, 0), Game(45678, "Dark Souls", None, 0), Game(621, "Peak", None, 0), Game(622111, "Ready or Not", None, 0), Game(646542, "FINAL FANTASY XIV Online", None, 0), Game(64642542, "Apex Legends", None, 0), Game(1111, "DeltaRune", None, 0), Game(646542, "Deus Ex", None, 0)])
+        right_display, left_game_display_frame = self.__create_left_andr_right_frames(self.main_user.game_list)#[Game(12345, "Counter-Strike 2", None, 0), Game(45678, "Dark Souls", None, 0), Game(621, "Peak", None, 0), Game(622111, "Ready or Not", None, 0), Game(646542, "FINAL FANTASY XIV Online", None, 0), Game(64642542, "Apex Legends", None, 0), Game(1111, "DeltaRune", None, 0), Game(646542, "Deus Ex", None, 0)])
         find_common_games_friends = tk.Button(right_display, text="Find common games\nwith your friends", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR,command=self.__button_find_common_friends_games)
         find_common_games_friends.pack( pady=60)
         pick_random_game = tk.Button(right_display, text="Pick random game from library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=self.__button_get_hour_selection)
         pick_random_game.pack()
-        #TODO
+        #TODO XXX
         #help_pick. replace command with command=lambda: self.__button_filter_out_genres(self.main_user.game_list)
-        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0), Game(698695621, "hog w10arts", ["hog wartz"], 0), Game(621968986, "hog9 warts", ["hog wartz"], 0), Game(62532161, "hog 8warts", ["hog wartz"], 0), Game(412341621, "hog 7warts", ["hog wartz"], 0), Game(62643221, "hog 6warts", ["hog wartz"], 0), Game(62753471, "hog 5warts", ["hog wartz"], 0), Game(6275246421, "hog 4warts", ["hog wartz"], 0), Game(6643643221, "hog w3arts", ["hog wartz"], 0), Game(6232321, "hog 2warts", ["hog wartz"], 0), Game(623321, "hog 1warts", ["hog wartz"], 0)]))
+        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=lambda: self.__button_filter_out_genres(self.main_user.game_list ))#[Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0), Game(698695621, "hog w10arts", ["hog wartz"], 0), Game(621968986, "hog9 warts", ["hog wartz"], 0), Game(62532161, "hog 8warts", ["hog wartz"], 0), Game(412341621, "hog 7warts", ["hog wartz"], 0), Game(62643221, "hog 6warts", ["hog wartz"], 0), Game(62753471, "hog 5warts", ["hog wartz"], 0), Game(6275246421, "hog 4warts", ["hog wartz"], 0), Game(6643643221, "hog w3arts", ["hog wartz"], 0), Game(6232321, "hog 2warts", ["hog wartz"], 0), Game(623321, "hog 1warts", ["hog wartz"], 0)]))
         help_pick.pack(pady=60)
 
     def __picker_undo(self):
@@ -242,18 +239,18 @@ class Application:
 
         
     def __create_frame_to_filter_hours(self):
-        #TODO
+        #TODO XXX
         print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
         #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
         PLACE_HOLDER_LIST = [Game(12345, "Counter-Strike", None, 100), Game(45678, "Minecraft", None, 10), Game(621, "hog warts", None, 0)]
-        right_display, left_game_display_frame = self.__create_left_andr_right_frames(PLACE_HOLDER_LIST)
+        right_display, left_game_display_frame = self.__create_left_andr_right_frames(self.main_user.game_list)
         info_text = tk.Label(right_display, text="Randomly pick a game\nbased off total hours played", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
         info_text.pack()
         slider = tk.Scale(right_display, from_=0, to=150, orient=tk.HORIZONTAL, length=int(SCREEN_WIDTH/4))
         slider.pack()
-        hours_button = tk.Button(right_display, text="Pick a random game\nwithin selected hours", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,command=lambda:  self.__button_pick_random_game(Utility.reduce_games_list_from_hours(slider.get(), PLACE_HOLDER_LIST)))
+        hours_button = tk.Button(right_display, text="Pick a random game\nwithin selected hours", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,command=lambda:  self.__button_pick_random_game(Utility.reduce_games_list_from_hours(slider.get(), self.main_user.game_list)))
         hours_button.pack(pady=20)
-        random_button = tk.Button(right_display, text="Pick at random!", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR,fg=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(PLACE_HOLDER_LIST))
+        random_button = tk.Button(right_display, text="Pick at random!", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR,fg=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(self.main_user.game_list))
         random_button.pack(pady=20)
 
     def __create_genre_selection_filtering(self):
@@ -326,16 +323,16 @@ class Application:
 
         frame_buttons, frame_canvas, canvas, vsb = self.__create_grid_selection()
         
-        #TODO
+        #TODO XXX
         print("TODO, CHECKLIST WONT FUNCTION UNTIL FRIENDS LIST IS IMPLEMENTED. ADDING FAKE VALUES...")
         #for loop should go based off len of friends list and instead of m, display user name. checkboxs[x] instead of x, it should store the name of the friend
-        for x in range(50):
-            temp_name = "m" * x
+        for x in range(len(self.main_user.friend_list)):
+            temp_name = self.main_user.friend_list[x].username
             if current_colm_count == GRID_MAX_COLUMS:
                 current_colm_count = 0
                 current_row_count += 1
             boolean_check = tk.BooleanVar()
-            checkboxs[x] = boolean_check
+            checkboxs[temp_name] = boolean_check
             selection_bool = tk.Checkbutton(frame_buttons, text=self.__text_cutoff(temp_name), variable=boolean_check, font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,)
             selection_bool.grid(row=current_row_count, column=current_colm_count, sticky='news', pady=0)
             current_colm_count += 1
@@ -363,8 +360,10 @@ class Application:
         #not great, but im running out of time to midmax this
         true_selected_friends_list = []
         for x in self.main_user.friend_list:
-            if x.name in selected_friends_list:
+            if x.username in selected_friends_list:
                 true_selected_friends_list.append(x)
+        #TODO
+        #generate friends games then look for common games
         self.filtered_game_list = Utility.find_common_games(true_selected_friends_list)
         self.__switch_menu_state(Application_Menu_State.SHARED_FRIENDS_GAME_LIST)
 
