@@ -52,17 +52,12 @@ class User:
 
     games = soup.find_all("game")
 
-    game_data = [ # create the list immediately so that you only need to loop once
-       (
-          game.find("appID").text.strip(),
-          game.find("name").text.strip()
-       )
-       for game in games    # want to try and see if I can move this before the list to make it easier to read
-    ]
-    self.game_list = game_data
+    new_game_list = []
 
+    for game in games:
+        new_game_list.append(Game(game.find("appID").text.strip(), game.find("name").text.strip()))
 
-
+    self.game_list = new_game_list
 
                 #For testing, leave commented
 '''def main():
