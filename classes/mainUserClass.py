@@ -8,7 +8,7 @@ from utilityClass import Utility
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK, ELUX_ID_TEMP
+from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK, ELUX_ID_TEMP, STEAM_ID_URL
 
 headers = {         # scraper does not work without this, this was the auto-complete but it seems to work
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -38,7 +38,7 @@ class MainUser(User):
 
         if self.is_account_private == True:   # return error and instructions to set your profile to public
             raise Exception("profile is private")
-        friends_list_link = STEAM_PROFILE_URL + self.user_id + "/friends/"
+        friends_list_link = STEAM_ID_URL + self.user_id + "/friends/"
 
         response = requests.get(friends_list_link, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')    #soup is the whole webpage
@@ -63,6 +63,7 @@ class MainUser(User):
     def get_game_list(self):
         if self.is_account_private == True:   # return error and instructions to set your profile to public
           raise Exception('profile is private')
+        games_list = []
         
         options = Options()
         options.add_argument("--headless")
@@ -109,7 +110,10 @@ class MainUser(User):
           image_url = header_img_tag.get('src') if header_img_tag else None
 
           game = Game(app_id, name, game_tag_list, hours, image_url)
-          self.game_list.append(game)
+          games_list.append(game)
+        return games_list
+
+
 
             
 def main():
