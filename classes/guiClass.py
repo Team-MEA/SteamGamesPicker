@@ -373,6 +373,8 @@ class Application:
             if x.username in selected_friends_list:
                 print(f"{x.username} was selected")
                 x.get_games_list_quick()
+                user_id, username, is_account_private, signature= Utility.get_user_info(x.user_id)
+                x.is_account_private = is_account_private
                 true_selected_friends_list.append(x)
                 
         #TODO

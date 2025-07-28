@@ -59,7 +59,12 @@ class User:
        )
        for game in games    # want to try and see if I can move this before the list to make it easier to read
     ]
-    self.game_list = game_data
+    game_object_list = []
+    for x in range(len(game_data)):
+      game_object_list.append(Game(game_data[x][0], game_data[x][1]))
+    
+
+    self.game_list = game_object_list
 
 
 
