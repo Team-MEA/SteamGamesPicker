@@ -373,12 +373,15 @@ class Application:
             if x.username in selected_friends_list:
                 print(f"{x.username} was selected")
                 x.get_games_list_quick()
+                user_id, username, is_account_private, signature= Utility.get_user_info(x.user_id)
+                x.is_account_private = is_account_private
                 true_selected_friends_list.append(x)
                 
         #TODO
         #generate friends games then look for common games
-        
+        print(true_selected_friends_list[0].game_list)
         self.filtered_game_list = Utility.find_common_games(self.main_user, true_selected_friends_list)
+        #print(self.filtered_game_list)
         self.__switch_menu_state(Application_Menu_State.SHARED_FRIENDS_GAME_LIST)
 
     def __create_end_screen(self):

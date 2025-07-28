@@ -7,8 +7,8 @@ class TestTextNode(unittest.TestCase):
         games_1 = [Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]
         games_2 = [Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]
         games_3 = [Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]
-        user_list = [User("123","bob", games_1), User("321","sob", games_2), User("456","lob", games_3)]
-        main_user = User("852","super bob", games_1)
+        user_list = [User("123","bob", games_1, False), User("321","sob", games_2, False), User("456","lob", games_3, False)]
+        main_user = User("852","super bob", games_1, False)
         common_games = Utility.find_common_games(main_user, user_list)
         self.assertEqual(set(common_games), set([Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]))
             
@@ -16,8 +16,8 @@ class TestTextNode(unittest.TestCase):
         games_1 = [Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]
         games_2 = [Game(12345, "Counter-Strike", None, 0), Game(621, "hog warts", None, 0)]
         games_3 = [Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]
-        user_list = [User("123","bob", games_1), User("321","sob", games_2), User("456","lob", games_3)]
-        main_user = User("852","super bob", games_1)
+        user_list = [User("123","bob", games_1, False), User("321","sob", games_2, False), User("456","lob", games_3, False)]
+        main_user = User("852","super bob", games_1, False)
         common_games = Utility.find_common_games(main_user, user_list)
         self.assertEqual(set(common_games), set([Game(621, "hog warts", None, 0)]))
         
@@ -25,8 +25,8 @@ class TestTextNode(unittest.TestCase):
         games_1 = [Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]
         games_2 = []
         games_3 = [Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]
-        user_list = [User("123","bob", games_1), User("321","sob", games_2), User("456","lob", games_3)]
-        main_user = User("852","super bob", games_1)
+        user_list = [User("123","bob", games_1, False), User("321","sob", games_2, False), User("456","lob", games_3, False)]
+        main_user = User("852","super bob", games_1, False)
         common_games = Utility.find_common_games(main_user, user_list)
         self.assertEqual(set(common_games), set([Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)]))
 
