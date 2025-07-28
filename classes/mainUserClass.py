@@ -48,6 +48,13 @@ class MainUser(User):
            new_friend = Utility.create_user(steam_id)
            friend_users.append(new_friend)
         
+        friend_blocks = soup.find_all("div", class_="friend_block_v2")
+        print(f"Found {len(friend_blocks)} friend blocks.")
+
+        with open("friends_debug.html", "w", encoding="utf-8") as f:
+          f.write(response.text)
+
+
         print(friend_users)
         return friend_users
 
