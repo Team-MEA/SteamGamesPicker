@@ -377,8 +377,9 @@ class Application:
                 
         #TODO
         #generate friends games then look for common games
-        
+        print(true_selected_friends_list[0].game_list)
         self.filtered_game_list = Utility.find_common_games(self.main_user, true_selected_friends_list)
+        #print(self.filtered_game_list)
         self.__switch_menu_state(Application_Menu_State.SHARED_FRIENDS_GAME_LIST)
 
     def __create_end_screen(self):
