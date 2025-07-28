@@ -2,13 +2,13 @@ import os
 import requests
 import sys
 import time
-from classes.userClass import User
-from classes.gameClass import Game
-from classes.utilityClass import Utility
+from userClass import User
+from gameClass import Game
+from utilityClass import Utility
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK
+from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK, ELUX_ID_TEMP
 
 headers = {         # scraper does not work without this, this was the auto-complete but it seems to work
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -19,7 +19,7 @@ class MainUser(User):
     Represents the primary user of the application, inheriting from the User class.
     This class adds a friend_list and custom behavior for generating its game list.
     """
-    def __init__(self, user_id: str, name: str, game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
+    def __init__(self, user_id: str, name = "", game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
         super().__init__(user_id = user_id,
                          name = name,
                          game_list = game_list, # Needed for Tests
@@ -55,6 +55,7 @@ class MainUser(User):
            new_friend = Utility.create_user(steam_id)
            friend_users.append(new_friend)
         
+        print(friend_users)
         return friend_users
 
 
@@ -111,3 +112,11 @@ class MainUser(User):
           self.game_list.append(game)
 
             
+def main():
+  player = MainUser(ELUX_ID_TEMP)
+  #player.check_user_info()
+  player.get_friend_list()
+  
+  
+if __name__ == "__main__":
+  main()

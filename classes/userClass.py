@@ -93,7 +93,7 @@ class User:
           game.find("name").text.strip()
        )
        for game in games    # want to try and see if I can move this before the list to make it easier to read
-    
+    ]
     return game_data
 
 
