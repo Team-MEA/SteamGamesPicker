@@ -9,6 +9,8 @@ from classes.stateClass import State
 from enum import Enum
 import webbrowser
 import os
+import threading
+import time
 class Application_Menu_State(Enum):
     SETUP_STEAM_URL = 0
     DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION = 1
@@ -32,9 +34,8 @@ class Application:
         self.filtered_game_list = None
         self.final_game_result = None
         self.__session_class = None
-        self.__list_seen_games = []
 
-        self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION)
+        self.__switch_menu_state(Application_Menu_State.SETUP_STEAM_URL)
 
         self.master_window.mainloop()
 
@@ -58,17 +59,59 @@ class Application:
         inputBox = tk.Entry(self.current_frame, width=int(SCREEN_WIDTH/14))
         inputBox.insert(0, STEAM_PLACEHOLDER_URL)
         inputBox.pack(pady=LABEL_PADDING_Y)
-        button = tk.Button(self.current_frame, text="click me", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__button_steam_profile_call(inputBox))
+        button = tk.Button(self.current_frame, text="click me", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__button_steam_profile_call(inputBox, button))
         button.pack()
 
-    def __button_steam_profile_call(self, input_box):
+    def sleeps(self):
+        time.sleep(WEBPAGE_WAIT_TIME)
+
+    def __create_loading_screen(self, button):
+        bar = ttk.Progressbar(self.current_frame, orient="horizontal", length=300, mode="determinate", maximum=100)
+        bar.pack(pady=10)
+        info_text = tk.Label(self.current_frame, text="Please wait while we identify your games and related tags...", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        info_text.pack(pady=LABEL_PADDING_Y)
+
+
+
+        def update_progress():
+            nonlocal progress_value
+            if progress_value < 100:
+                progress_value += int(100/WEBPAGE_WAIT_TIME)
+                bar['value']+=int(100/WEBPAGE_WAIT_TIME)
+                self.current_frame.after(1010, update_progress)  # Update every second
+                self.current_frame.update_idletasks()
+            else:
+                self.current_frame.after(0, lambda: (
+                    button.config(state='normal'),
+                    bar.pack_forget(),
+                    info_text.pack_forget()
+                ))
+
+        def do_fetch():
+            self.sleeps()
+            #TODO
+            #REPLACE THE ABOVE "SELF.SLEEPS()" WITH STEAM SCRAPER API THAT CALLS THE MAIN USER AND SET IT TO SELF.MAIN_USER
+            print("TODO: IMPLEMENT STEAM API SCRAPER")
+
+        bar.pack()
+        button.config(state='disabled')
+        progress_value = 0
+
+        threading.Thread(target=do_fetch, daemon=True).start()
+        update_progress()
+
+
+    def __button_steam_profile_call(self, input_box, button_to_disable):
         user_input_text = input_box.get()
         if user_input_text == "" or user_input_text == None or user_input_text == STEAM_PLACEHOLDER_URL:
             messagebox.showerror(self.current_frame, "URL is required")
             return
-        raise Exception("set up steamAPI interaction to retrieve main user")#TODO
+        #raise Exception("set up steamAPI interaction to retrieve main user")#TODO
         #todo call steam api, provide the userinput url and get a mainuser object from steam api.
         #store mainuser object in self.main_user. if error, or invalid user, showerror
+        #assuming it works. display progressbar
+        self.__create_loading_screen(button_to_disable)
+
     
     def __button_find_common_friends_games(self):
         self.__switch_menu_state(Application_Menu_State.CHOOSE_FRIENDS)
@@ -115,7 +158,7 @@ class Application:
         print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
         #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
         right_display, left_game_display_frame = self.__create_left_andr_right_frames([Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)])
-        
+        self.current_frame.s .show_frame("AnimationWindow")
         find_common_games_friends = tk.Button(right_display, text="Find common games\nwith your friends", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_find_common_friends_games)
         find_common_games_friends.pack( pady=20)
         pick_random_game = tk.Button(right_display, text="Pick random game from library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_get_hour_selection)
