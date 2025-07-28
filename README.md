@@ -11,6 +11,8 @@ The Steam Games Picker is a powerful backend system designed to help you (and yo
 --------------
 ## Why?
 
+Sometimes picking a game can be difficult! This program is designed to help narrow down what you'd like to play by comparing games, and picking between them until you are down to your top picks. Helpful for a large backlog, you can see each title in front of you (even the ones you bought on sale years ago!).
+
 ## 📱 Features:
 
 *   **Intelligent Batch Generation**: Dynamically creates batches of games, reducing the number of choices as you progress.
