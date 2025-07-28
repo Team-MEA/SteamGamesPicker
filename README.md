@@ -2,7 +2,7 @@
 
 **Navigate Your Vast Game Library with Ease!**
 
-The Steam Games Picker is a powerful backend system designed to help you (and your friends!) effortlessly narrow down a massive collection of games to find that perfect next pick. Tired of endless scrolling and indecision? This application intelligently filters, sorts, and presents games in manageable batches, keeping track of your journey every step of the way.
+The Steam Games Picker is a powerful backend system designed to help you (and your friends!) effortlessly narrow down a massive collection of games to find that perfect next pick. Tired of endless scrolling and indecision? A seemingly endless backlog? This application intelligently filters, sorts, and presents games in manageable batches, helping you decide which game to play next.
 
 --------------
 ![Setup Sample](/assets/StartUpMenu.png "Setup Sample")
