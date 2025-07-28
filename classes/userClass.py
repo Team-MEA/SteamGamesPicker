@@ -69,12 +69,3 @@ class User:
     
     #self.game_list = new_game_list
 
-                #For testing, leave commented
-'''def main():
-  player = User(ELUX_ID_TEMP)
-  #player.check_user_info()
-  player.get_games_list_quick()
-  
-  
-if __name__ == "__main__":
-  main()'''

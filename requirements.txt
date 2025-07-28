@@ -1,6 +1,4 @@
 beautifulsoup4
 selenium
-chromedriver
-chromium
 requests
 lxml

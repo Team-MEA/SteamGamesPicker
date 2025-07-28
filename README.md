@@ -74,13 +74,51 @@ You should see `(venv)` prepended to your terminal prompt\, indicating the virtu
 
 ### Step 4: Install Dependencies
 
-You can install them using `pip`:
+You can install part of them using `pip`:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-NOTE: if you have issues installing chromium (often occures with WSL terminals) you will need to download and install google chrome
+chrome and chromedriver are also needed.
+
+
+## Installation guide for chrome and chromedriver dependancies:
+
+# Ubuntu/WSL:
+```bash
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+sudo apt-get install -f
+google-chrome --version
+```
+```bash
+wget https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.168/linux64/chromedriver-linux64.zip
+unzip chromedriver-linux64.zip
+sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
+sudo chmod +x /usr/local/bin/chromedriver
+chromedriver --version
+```
+google-chrome and chromedriver need to have the same version, so modify the version part of the command accordingly.
+
+# Windows:
+ 1. Download Google Chrome from https://www.google.com/chrome/
+ 2. Open Chrome and go to chrome://settings/help to find version
+ 3. Download the matching ChromeDriver from https://sites.google.com/chromium.org/driver/
+ 4. Unzip chromedriver.exe and place in a folder in your PATH
+ 5. In Command Prompt or PowerShell, check:
+```bash
+chromedriver --version
+```
+# MacOS:
+ Download Chrome from https://www.google.com/chrome/
+ Download ChromeDriver from https://sites.google.com/chromium.org/driver/
+ ```bash
+unzip chromedriver-mac-x64.zip
+sudo mv chromedriver /usr/local/bin/
+sudo chmod +x /usr/local/bin/chromedriver
+chromedriver --version
+```
 
 ### Step 5: Run the Application
 
@@ -94,6 +132,8 @@ python3 main.py
 python main.py
 ```
 
+## State of the project:
+The project is in its MVP state and will be improved upon.
 
 ## Contributors
 Massive shout out to our contributors for this Hackathon. This project wouldnt have been feasible without that.

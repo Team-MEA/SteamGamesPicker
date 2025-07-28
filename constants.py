@@ -12,9 +12,6 @@ STEAM_PROFILE_URL_FOR_PARSE = "https://steamcommunity.com/profiles/"
 
 STEAM_ID_URL = "https://steamcommunity.com/profiles/"
 
-ELUX_ID_TEMP = "76561198096871136"
-
-
 
 WEBPAGE_WAIT_TIME = 15
 
