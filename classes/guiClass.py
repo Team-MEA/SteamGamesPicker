@@ -107,9 +107,15 @@ class Application:
             messagebox.showerror(self.current_frame, "URL is required")
             return
         #raise Exception("set up steamAPI interaction to retrieve main user")#TODO
-        #todo call steam api, provide the userinput url and get a mainuser object from steam api.
-        #store mainuser object in self.main_user. if error, or invalid user, showerror
-        #assuming it works. display progressbar
+        #todo get the main users games, then friends
+        steam_id = Utility.get_steamid_from_url(input_box.get())
+        try:
+            self.main_user = Utility.create_user(steam_id,True)
+        except Exception as e:
+            messagebox.showerror(self.current_frame, f"Private account or invalid...\n{e}")
+            self.__switch_menu_state(Application_Menu_State.SETUP_STEAM_URL)
+            return
+        print("valid account")
         self.__create_loading_screen(button_to_disable)
 
     
@@ -145,9 +151,9 @@ class Application:
         try:
             for i in range(len(game_list)):
                 container_for_game_objects = tk.Frame(left_game_display_frame, bg=ACENT_COLOR)
-                left_game_display_frame.create_window(DISTANCE_FROM_WEST_WALL, i * GAME_OBJECT_PADDING_Y, window=container_for_game_objects, height=30, width= int(SCREEN_WIDTH))
-                game_name = tk.Label(container_for_game_objects, text=f"{game_list[i]}")
-                game_name.pack(padx=25)
+                left_game_display_frame.create_window(DISTANCE_FROM_WEST_WALL, i * GAME_OBJECT_PADDING_Y, window=container_for_game_objects, height=30, width= int(SCREEN_WIDTH), anchor="center")
+                game_name = tk.Label(container_for_game_objects, text=f"{game_list[i]}", font=self.__font_style_1, background=ACENT_COLOR)
+                game_name.pack(padx=25, anchor="center", fill="both")
         except Exception as e:
             print(f"main_user not yet implemented can load list {e}")
 
@@ -157,16 +163,15 @@ class Application:
         #TODO
         print("TODO: GET NEEDED INFORMAION FROM MAIN_USER")
         #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
-        right_display, left_game_display_frame = self.__create_left_andr_right_frames([Game(12345, "Counter-Strike", None, 0), Game(45678, "Minecraft", None, 0), Game(621, "hog warts", None, 0)])
-        self.current_frame.s .show_frame("AnimationWindow")
-        find_common_games_friends = tk.Button(right_display, text="Find common games\nwith your friends", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_find_common_friends_games)
-        find_common_games_friends.pack( pady=20)
-        pick_random_game = tk.Button(right_display, text="Pick random game from library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=self.__button_get_hour_selection)
+        right_display, left_game_display_frame = self.__create_left_andr_right_frames([Game(12345, "Counter-Strike 2", None, 0), Game(45678, "Dark Souls", None, 0), Game(621, "Peak", None, 0), Game(622111, "Ready or Not", None, 0), Game(646542, "FINAL FANTASY XIV Online", None, 0), Game(64642542, "Apex Legends", None, 0), Game(1111, "DeltaRune", None, 0), Game(646542, "Deus Ex", None, 0)])
+        find_common_games_friends = tk.Button(right_display, text="Find common games\nwith your friends", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR,command=self.__button_find_common_friends_games)
+        find_common_games_friends.pack( pady=60)
+        pick_random_game = tk.Button(right_display, text="Pick random game from library", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=self.__button_get_hour_selection)
         pick_random_game.pack()
         #TODO
         #help_pick. replace command with command=lambda: self.__button_filter_out_genres(self.main_user.game_list)
-        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0), Game(698695621, "hog w10arts", ["hog wartz"], 0), Game(621968986, "hog9 warts", ["hog wartz"], 0), Game(62532161, "hog 8warts", ["hog wartz"], 0), Game(412341621, "hog 7warts", ["hog wartz"], 0), Game(62643221, "hog 6warts", ["hog wartz"], 0), Game(62753471, "hog 5warts", ["hog wartz"], 0), Game(6275246421, "hog 4warts", ["hog wartz"], 0), Game(6643643221, "hog w3arts", ["hog wartz"], 0), Game(6232321, "hog 2warts", ["hog wartz"], 0), Game(623321, "hog 1warts", ["hog wartz"], 0)]))
-        help_pick.pack(pady=20)
+        help_pick = tk.Button(right_display, text="Help me pick a game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=THIRDARY_COLOR, command=lambda: self.__button_filter_out_genres( [Game(12345, "Counter-Strike", ["fps", "russian", "stimky"], 0), Game(45678, "Minecraft", ["fps", "building", "sim", "AVERYLONGTAGNAMEFORSOMEREASON"], 0), Game(621, "hog warts", ["hog wartz"], 0), Game(698695621, "hog w10arts", ["hog wartz"], 0), Game(621968986, "hog9 warts", ["hog wartz"], 0), Game(62532161, "hog 8warts", ["hog wartz"], 0), Game(412341621, "hog 7warts", ["hog wartz"], 0), Game(62643221, "hog 6warts", ["hog wartz"], 0), Game(62753471, "hog 5warts", ["hog wartz"], 0), Game(6275246421, "hog 4warts", ["hog wartz"], 0), Game(6643643221, "hog w3arts", ["hog wartz"], 0), Game(6232321, "hog 2warts", ["hog wartz"], 0), Game(623321, "hog 1warts", ["hog wartz"], 0)]))
+        help_pick.pack(pady=60)
 
     def __picker_undo(self):
         self.__session_class.undo()
@@ -187,9 +192,11 @@ class Application:
                         y.switch_selection()
         self.__session_class.confirm()
         print(f"final pick is {self.__session_class.history_array[self.__session_class.current_index].final_pick}")
-        if self.__session_class.history_array[self.__session_class.current_index].final_pick == True:
+        if self.__session_class.history_array[self.__session_class.current_index].final_pick != None:
+            print("am i printing")
             self.final_game_result = self.__session_class.history_array[self.__session_class.current_index].final_pick
             self.__switch_menu_state(Application_Menu_State.END_STATE)
+            return
         else:
             self.__switch_menu_state(Application_Menu_State.PICKER_UI_CONTINUE)
         
@@ -240,17 +247,17 @@ class Application:
         #where the function below calls a bunch of game objects, replace it with self.main_user.game_list
         PLACE_HOLDER_LIST = [Game(12345, "Counter-Strike", None, 100), Game(45678, "Minecraft", None, 10), Game(621, "hog warts", None, 0)]
         right_display, left_game_display_frame = self.__create_left_andr_right_frames(PLACE_HOLDER_LIST)
-        info_text = tk.Label(right_display, text="Randomly pick a game\nbased off total hours played", font=self.__font_style_1)
+        info_text = tk.Label(right_display, text="Randomly pick a game\nbased off total hours played", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
         info_text.pack()
         slider = tk.Scale(right_display, from_=0, to=150, orient=tk.HORIZONTAL, length=int(SCREEN_WIDTH/4))
         slider.pack()
-        hours_button = tk.Button(right_display, text="pick game within\nselected hours", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(Utility.reduce_games_list_from_hours(slider.get(), PLACE_HOLDER_LIST)))
+        hours_button = tk.Button(right_display, text="Pick a random game\nwithin selected hours", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR,command=lambda:  self.__button_pick_random_game(Utility.reduce_games_list_from_hours(slider.get(), PLACE_HOLDER_LIST)))
         hours_button.pack(pady=20)
-        random_button = tk.Button(right_display, text="pick_random", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(PLACE_HOLDER_LIST))
+        random_button = tk.Button(right_display, text="Pick at random!", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR,fg=ACENT_COLOR, command=lambda:  self.__button_pick_random_game(PLACE_HOLDER_LIST))
         random_button.pack(pady=20)
 
     def __create_genre_selection_filtering(self):
-        info_text = tk.Label(self.current_frame, text="select the genres you want to filter for\nSelect none to skip", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        info_text = tk.Label(self.current_frame, text="Select the genres you want to filter for\nDon't select any to skip", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
         info_text.pack(pady=LABEL_PADDING_Y)
         checkboxs = {}
         current_colm_count = 0
@@ -362,13 +369,15 @@ class Application:
         self.__switch_menu_state(Application_Menu_State.SHARED_FRIENDS_GAME_LIST)
 
     def __create_end_screen(self):
-        info_text = tk.Label(self.current_frame, text=f"{self.final_game_result}", font=self.__font_header)
-        info_text.pack()
+        start_text = tk.Label(self.current_frame, text=f"Your choosen result is...", font=self.__font_style_1, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        start_text.pack()
+        info_text = tk.Label(self.current_frame, text=f"{self.final_game_result}", font=self.__font_header, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        info_text.pack(pady=FINAL_GAME_RESULT_PADDING_Y)
         #TODO
         #i cannot confirm if start_game_button works or not
-        start_game_button = tk.Button(self.current_frame, text="run game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: os.system(f"{STEAM_RUN_COMMAND}{self.final_game_result.app_id}"))
+        start_game_button = tk.Button(self.current_frame, text="run game", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: os.system(f"{STEAM_RUN_COMMAND}{self.final_game_result.app_id}"))
         start_game_button.pack(pady=20)
-        back_to_main = tk.Button(self.current_frame, text=" go back to main", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, command=lambda: self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION))
+        back_to_main = tk.Button(self.current_frame, text=" go back to main", font=self.__font_style_1, bg=SECONDARY_COLOR, highlightbackground=ACENT_COLOR, fg=ACENT_COLOR, command=lambda: self.__switch_menu_state(Application_Menu_State.DISPLAY_GAME_LIST_WITH_FRIENDS_OPTION))
         back_to_main.pack(pady=20)
 
 

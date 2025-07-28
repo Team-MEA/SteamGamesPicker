@@ -1,10 +1,17 @@
-# Steam Games Picker
+# 🎮 Steam Games Picker
 
 **Navigate Your Vast Game Library with Ease!**
 
 The Steam Games Picker is a powerful backend system designed to help you (and your friends!) effortlessly narrow down a massive collection of games to find that perfect next pick. Tired of endless scrolling and indecision? This application intelligently filters, sorts, and presents games in manageable batches, keeping track of your journey every step of the way.
 
-## Features:
+--------------
+![Setup Sample](/assets/StartUpMenu.png "Setup Sample")
+
+![Display Sample](/assets/GameDisplayMenu.png "Display Sample")
+--------------
+## Why?
+
+## 📱 Features:
 
 *   **Intelligent Batch Generation**: Dynamically creates batches of games, reducing the number of choices as you progress.
 *   **Interactive Filtering**:
@@ -16,11 +23,11 @@ The Steam Games Picker is a powerful backend system designed to help you (and yo
 *   **Final Pick Identification**: Clearly identifies the single chosen game once the selection process is complete.
 *   **Modular & Tested Design**: Built with robust validation and unit-tested components, ensuring reliability and maintainability.
 
-## How It Works (Core Logic):
+## 🧩 How It Works (Core Logic):
 
 The system leverages a sophisticated `Session` manager that orchestrates `State` objects, each representing a unique snapshot of your game selection journey. Games are intelligently moved between `"remaining,"` `"batch,"` and `"seen"` pools, driven by your confirmations and filtering choices. Core utilities handle complex operations like set intersections for common games and and precise tag-based filtering.
 
-## Installation
+## 🔧 Installation
 
 To set up and run the Steam Games Picker's core logic, follow these steps:
 
@@ -38,7 +45,7 @@ git clone https://github.com/Team-MEA/SteamGamesPicker.git
 cd SteamGamesPicker
 ```
 
-### Step 2: Create a Virtual Environment (Recommended)
+### Step 2: Create a Virtual Environment
 
 It's highly recommended to create a Python [virtual environment](https://docs.python.org/3/library/venv.html). This isolates your project's dependencies from your system-wide Python installation, preventing conflicts.
 
@@ -67,26 +74,13 @@ You should see `(venv)` prepended to your terminal prompt\, indicating the virtu
 
 ### Step 4: Install Dependencies
 
-The application relies on specific Python packages\. These are listed in the \`requirements\.txt\` file\.
-
-**Creating `requirements.txt`**:
-
-The file named `requirements.txt` in the **root directory of the repository** (`SteamGamesPicker/`) lists all re requirements needed to run the program:
-
-```
-beautifulsoup4
-selenium
-# tkinter is usually included with Python, but if you encounter issues on Linux,
-# you might need to install a system package like 'python3-tk' (e.g., sudo apt-get install python3-tk)
-```
-
 You can install them using `pip`:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 5: Run the Application or Tests
+### Step 5: Run the Application
 
 **To run the main application**:
 
@@ -94,6 +88,15 @@ Make sure your virtual environment is active (Step 3). From the project's root d
 
 ```bash
 python3 main.py
+# or
+python main.py
 ```
 
-### Step 6: Have Fun!
+
+## Contributors
+Massive shout out to our contributors for this Hackathon. This project wouldnt have been feasible without that.
+This project was incredibly fun and stressfull, thank you for all your work.
+
+- [@EluxRed](https://github.com/EluxRed)
+- [@5PenguinsInATrenchCoat](https://github.com/5PenguinsInATrenchCoat)
+- [@Awowz](https://github.com/Awowz)
