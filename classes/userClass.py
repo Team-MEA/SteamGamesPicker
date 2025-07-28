@@ -27,10 +27,7 @@ class User:
   def __init__(self, user_id: str, name = "", game_list: list[Game] = None, is_account_private: bool = True, profile_image: str = None) -> None:
     self.user_id = user_id
     self.username = name
-    if game_list is None:
-            self.game_list = self.get_games_list_quick()
-    else:
-       self.game_list = game_list # Needed for Tests
+    self.game_list = game_list
     self.is_account_private = is_account_private
     self.profile_image = profile_image
 
@@ -45,6 +42,7 @@ class User:
         Returns an unambiguous string representation of the User object. By default, it uses the __str__ method.
         """
         return self.__str__()
+
 
   def get_games_list_quick(self):
     games_link = STEAM_ID_URL + self.user_id + "/games?xml=1"
@@ -61,7 +59,7 @@ class User:
        )
        for game in games    # want to try and see if I can move this before the list to make it easier to read
     ]
-    return game_data
+    self.game_list = game_data
 
 
 
