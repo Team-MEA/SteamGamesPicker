@@ -46,7 +46,7 @@ class Session:
         else:
             return LOWER_MAX_BATCH
 
-    def generate_batch_info(self, games: list[Game], seen_games: list[Game] = []):
+    def generate_batch_info(self, games: list[Game], seen_games_list: list[Game] = []):
         """
         Recursively generates information for the next batch of games.
         This method manages the core logic of shrinking the batch size,
@@ -60,10 +60,11 @@ class Session:
         Returns:
             tuple: A tuple containing (batch, remaining_games, seen_games) for the next state.
         """
+        seen_games = seen_games_list.copy()
         length = len(games)
         if hasattr(self, "history_array"): # Checks if history_array exists and is not empty, important for the Session class initialization, which does not create this field at this point yet.
             prev_state = self.history_array[self.current_index] # Index not yet incremented, so current_index is fine
-            prev_batch = prev_state.batch
+            prev_batch = prev_state.batch.copy()
             if prev_batch:
                 for game in prev_batch:
                     if game.is_selected:
