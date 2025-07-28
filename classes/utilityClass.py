@@ -12,7 +12,7 @@ headers = {         # scraper does not work without this, this was the auto-comp
 class Utility:    
     
     @staticmethod
-    def find_common_games(main_user: User, selected_friends: list[User]) -> list[Game]:
+    def find_common_games(main_user: User, selected_friends_list: list[User]) -> list[Game]:
         """
         Takes primary user, and a group of selected friends (not all friends). Returns a list of games they have in common.
         """
@@ -20,15 +20,15 @@ class Utility:
             raise ValueError("'main_user not found.")
         if not isinstance(main_user, User):
                 raise TypeError(f"Input 'main_user' in Utility.find_common_games must be an instance of the User class.")        
-        if not isinstance(selected_friends, list):
+        if not isinstance(selected_friends_list, list):
             raise TypeError("Input 'selected_friends' in Utility.find_common_games must be a list.")
-        if not selected_friends:
+        if not selected_friends_list:
             raise ValueError("Seems like no friends were selected.")
-        for i, friend in enumerate(selected_friends):
+        for i, friend in enumerate(selected_friends_list):
             if not isinstance(friend, User):
                 raise TypeError(f"All elements in 'selected_friends' in Utility.find_common_games must be instances of the User class. "
                                 f"Found non-User element at index {i}: {type(friend)}")
-
+        selected_friends = Utility.create_full_users_from_list(selected_friends_list)
         games_shared_with_friends = set(main_user.game_list) # It's more efficient keeping it as set for the whole loop duration
         for x in range(0, len(selected_friends)):
             if selected_friends[x].is_account_private or len(selected_friends[x].game_list) == 0:
@@ -168,6 +168,7 @@ class Utility:
         for user in list_of_users:
             user_info = Utility.get_user_info(user.user_id)
             user.is_private = user_info[2]
+            user.game_list = user.get_games_list_quick()
             list_of_full_users.append(user)
         return list_of_full_users
 

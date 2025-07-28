@@ -49,7 +49,7 @@ class MainUser(User):
           name_tag = friend.find("div", class_= "friend_block_content")
           display_name = name_tag.contents[0].strip()
 
-          new_friend = Utility.create_user_simple(steam_id, name=display_name)
+          new_friend = Utility.create_user_simple(steam_id, display_name)
           friend_users.append(new_friend)
         
         return friend_users
