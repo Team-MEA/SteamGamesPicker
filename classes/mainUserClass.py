@@ -8,7 +8,7 @@ from classes.utilityClass import Utility
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK, ELUX_ID_TEMP, STEAM_ID_URL
+from constants import STEAM_PROFILE_URL, WEBPAGE_WAIT_TIME, GAME_TAGS_LINK, STEAM_ID_URL
 
 headers = {         # scraper does not work without this, this was the auto-complete but it seems to work
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -108,15 +108,3 @@ class MainUser(User):
           game = Game(app_id, name, game_tag_list, hours, image_url)
           games_list.append(game)
         return games_list
-
-
-
-'''            
-def main():
-  print("Creating MainUser...")
-  player = MainUser(ELUX_ID_TEMP)
-  print("MainUser created.")
-  
-if __name__ == "__main__":
-  main()
-'''
