@@ -3,3 +3,4 @@ selenium
 chromedriver
 chromium
 requests
+lxml

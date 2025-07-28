@@ -80,6 +80,8 @@ You can install them using `pip`:
 pip install -r requirements.txt
 ```
 
+NOTE: if you have issues installing chromium (often occures with WSL terminals) you will need to download and install google chrome
+
 ### Step 5: Run the Application
 
 **To run the main application**:

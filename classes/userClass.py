@@ -13,7 +13,7 @@ sys.path.append(parent_dir)
 
 
 from constants import STEAM_ID_LINK, GAME_TAGS_LINK, WEBPAGE_WAIT_TIME, STEAM_ID_URL, ELUX_ID_TEMP
-from gameClass import Game
+from classes.gameClass import Game
 
 headers = {         # scraper does not work without this, this was the auto-complete but it seems to work
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'

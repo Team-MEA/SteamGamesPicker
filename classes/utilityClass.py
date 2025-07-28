@@ -1,5 +1,5 @@
-from userClass import User
-from gameClass import Game
+from classes.userClass import User
+from classes.gameClass import Game
 from constants import STEAM_ID_LINK, STEAM_PROFILE_SIGNATURE_IMG_LINK, STEAM_PROFILE_URL_FOR_PARSE
 import random
 import requests
@@ -151,7 +151,7 @@ class Utility:
     
     @staticmethod
     def create_main_user(user_id):       # GUI will call this one to create the MainUser
-        from mainUserClass import MainUser
+        from classes.mainUserClass import MainUser
         user_info = Utility.get_user_info(user_id)
         id = user_info[0]
         username = user_info[1]
@@ -179,3 +179,4 @@ class Utility:
     def get_steamid_from_url(steam_url:str) -> str:
         steamid = steam_url
         steamid = steamid.replace(STEAM_PROFILE_URL_FOR_PARSE, "")
+        return steamid

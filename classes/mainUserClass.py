@@ -2,9 +2,9 @@ import os
 import requests
 import sys
 import time
-from userClass import User
-from gameClass import Game
-from utilityClass import Utility
+from classes.userClass import User
+from classes.gameClass import Game
+from classes.utilityClass import Utility
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -25,8 +25,8 @@ class MainUser(User):
                          game_list = game_list, # Needed for Tests
                          is_account_private = is_account_private,
                          profile_image = profile_image)
-        if game_list is None:
-            self.game_list = self.get_game_list()
+        #if game_list is None:
+            #self.game_list = self.get_game_list()
         self.friend_list = self.get_friend_list()
 
     def get_friend_list(self) -> list[User]:
