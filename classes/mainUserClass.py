@@ -29,13 +29,6 @@ class MainUser(User):
             self.game_list = self.get_game_list()
         self.friend_list = self.get_friend_list()
 
-    def get_game_list(self) -> list[Game]:
-        """
-        Overrides the get_game_list method from the User class.
-        Returns a list of Game objects with the following fields: app_id, name, tags, hours, image.
-        """
-        pass 
-
     def get_friend_list(self) -> list[User]:
         """
         Returns a list of User objects, aka friends, with the following fields: 
@@ -66,7 +59,7 @@ class MainUser(User):
         
         options = Options()
         options.add_argument("--headless")
-        driver = webdriver.Chrome(options=options) # this and 2 lines above it are meant to keep the webpage from popping up, doesn't seem to be working though
+        driver = webdriver.Chrome(options=options)
 
         game_list_url = GAME_TAGS_LINK + self.user_id
 
