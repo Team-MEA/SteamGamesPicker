@@ -44,9 +44,13 @@ class MainUser(User):
         soup = BeautifulSoup(response.text, 'html.parser')    #soup is the whole webpage
 
         for friend in soup.find_all("div", class_="friend_block_v2"):
-           steam_id = friend.get("data-steamid")
-           new_friend = Utility.create_user(steam_id)
-           friend_users.append(new_friend)
+          steam_id = friend.get("data-steamid")
+
+          name_tag = friend.find("div", class_= "friend_block_content")
+          display_name = name_tag.contents[0].strip()
+
+          new_friend = Utility.create_user_simple(steam_id, name=display_name)
+          friend_users.append(new_friend)
         
         return friend_users
 
