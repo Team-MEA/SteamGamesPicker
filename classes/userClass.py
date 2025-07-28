@@ -37,49 +37,13 @@ class User:
         """
         Returns a user-friendly string representation of the User object, which is its name.
         """
-        return self.name
+        return self.username
   
   def __repr__(self):
         """
         Returns an unambiguous string representation of the User object. By default, it uses the __str__ method.
         """
         return self.__str__()
-
-  def check_user_info(self): # check to see the privacy status of the user profile    MOVED TO UTILITY CLASS, CAN BE DELETED FROM HERE
-    user_id_link = STEAM_ID_LINK + self.user_id
-
-    response = requests.get(user_id_link, headers=headers)
-    soup = BeautifulSoup(response.text, 'html.parser')    #soup is the whole webpage
-      
-    info_table = soup.find("table", id = "profile-info")
-    if info_table is None:
-      raise Exception("lookup failed, invalid ID")
-    search_string = "profile state"
-
-    table_rows = info_table.find_all("tr")
-    for child in table_rows:
-      if search_string in child.get_text(strip=True).lower():
-        if "public" in child.get_text(strip=True).lower():
-          self.is_account_private = False   # if both are correct, the profile is private
-          break
-        else:                               # there is only 2 states, so if it's not public raise an error (friends only also reads as private, and unreachable)
-          raise Exception("profile is private")
-    else:    
-      raise Exception("lookup failed")
-    
-    if self.is_account_private == False:    #Only continue if the profile is set to public
-      for row in table_rows:
-        row_text = row.get_text(strip=True).lower()
-        if row_text.startswith("name"):
-          self.username = row_text.split("name")[1].strip()
-          break
-      else:
-        raise Exception("username not found")
-    
-    
-
-
-
 
   def get_game_list(self):
     if self.is_account_private == True:   # return error and instructions to set your profile to public
@@ -132,14 +96,6 @@ class User:
       game = Game(app_id, name, game_tag_list, hours, image_url)
       self.game_list.append(game)
 
-
-
-  
-  
-  def get_friend_list(self):
-    if self.is_account_private == True:   # return error and instructions to set your profile to public
-      raise Exception("profile is private")
-    #TO DO
 
 
                 #For testing, leave commented

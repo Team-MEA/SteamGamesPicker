@@ -1,6 +1,7 @@
 
 # URLs
 STEAM_ID_LINK = "https://www.steamidfinder.com/lookup/"
+STEAM_PROFILE_SIGNATURE_IMG_LINK = "https://www.steamidfinder.com/signature/"
 GAME_TAGS_LINK = "https://www.lorenzostanco.com/lab/steam/u/"
 STEAM_PROFILE_URL = "https://steamcommunity.com/my"
 STEAM_PLACEHOLDER_URL = "https://steamcommunity.com/profiles/12345678"

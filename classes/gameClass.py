@@ -1,5 +1,5 @@
 class Game:
-def __init__(self, app_id: str, name: str, tags: list[str] = None, hours: float = None, image: str = None, is_selected: bool = False) -> None:
+    def __init__(self, app_id: str, name: str, tags: list[str] = None, hours: float = None, image: str = None, is_selected: bool = False) -> None:
         """
         Represents a single game within the Steam Games Picker application.
 
