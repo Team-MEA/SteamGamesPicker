@@ -11,6 +11,7 @@ child_dir = os.path.dirname(__file__)
 parent_dir = os.path.abspath(os.path.join(child_dir, '..'))     # unsure if necesary, seems to only be needed on my setup for some reason, try commenting out and see if it works if anyone uses this
 sys.path.append(parent_dir)
 
+
 from constants import STEAM_ID_LINK, GAME_TAGS_LINK, WEBPAGE_WAIT_TIME, STEAM_ID_URL, ELUX_ID_TEMP
 from gameClass import Game
 
@@ -37,7 +38,7 @@ class User:
         """
         Returns a user-friendly string representation of the User object, which is its name.
         """
-        return self.name
+        return self.username
   
   def __repr__(self):
         """
@@ -92,20 +93,18 @@ class User:
           game.find("name").text.strip()
        )
        for game in games    # want to try and see if I can move this before the list to make it easier to read
-    ]
     
-    self.game_list = game_data
-    
-  
+    return game_data
+
 
 
 
                 #For testing, leave commented
-def main():
+'''def main():
   player = User(ELUX_ID_TEMP)
   #player.check_user_info()
   player.get_games_list_quick()
   
   
 if __name__ == "__main__":
-  main()
+  main()'''
