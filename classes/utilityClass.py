@@ -1,6 +1,7 @@
-from userClass import User
-from gameClass import Game
-from constants import STEAM_ID_LINK, STEAM_PROFILE_SIGNATURE_IMG_LINK
+from classes.userClass import User
+from classes.mainUserClass import MainUser
+from classes.gameClass import Game
+from constants import STEAM_ID_LINK, STEAM_PROFILE_SIGNATURE_IMG_LINK, STEAM_PROFILE_URL_FOR_PARSE
 import random
 import requests
 from bs4 import BeautifulSoup
@@ -163,3 +164,9 @@ class Utility:
             return MainUser(id, username, None, is_private, signature)
         else:
             return User(id, username, None, is_private, signature)
+
+    @staticmethod
+    def get_steamid_from_url(steam_url:str) -> str:
+        steamid = steam_url
+        steamid = steamid.replace(STEAM_PROFILE_URL_FOR_PARSE, "")
+        return steamid
