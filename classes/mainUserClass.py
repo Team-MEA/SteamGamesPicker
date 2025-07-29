@@ -89,7 +89,7 @@ class MainUser(User):
           tags_table = entry.find('p', class_='tags')
           tag_spans = tags_table.find_all('span') if tags_table else []
           for tag in tag_spans:
-            game_tag_list.append(tag.get_text(strip=True))
+            game_tag_list.append((tag.get_text(strip=True)).replace(",", ""))    # added stripping the coma
 
           hours_tag = entry.find('p', class_='hours')
           hours = 0.0   # default value so missing it doesn't crash    
