@@ -12,10 +12,13 @@ STEAM_PROFILE_URL_FOR_PARSE = "https://steamcommunity.com/profiles/"
 
 STEAM_ID_URL = "https://steamcommunity.com/profiles/"
 
-
+# MAIN USER
 WEBPAGE_WAIT_TIME = 15
 
+# UTILITY
+MULTIPLAYER_TAGS = ["Co-op", "Co-op Campaign", "Local Co-Op", "Online Co-Op", "Asynchronous Multiplayer", "Local Multiplayer", "Massively Multiplayer", "Multiplayer"]
 
+# BATCH
 UPPER_LIMIT = 200
 LOWER_LIMIT = 100
 
@@ -24,8 +27,7 @@ LOWER_MAX_BATCH = 10
 
 SCALING_FACTOR = 10
 
-MIN_BATCH = 3 #probably not needed anymore, unless we want to implement like a last pick scenario
-
+# WINDOW AND COLORS
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 500
 BORDER_WIDTH = 5
