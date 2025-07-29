@@ -211,3 +211,7 @@ class Utility:
         steamid = steam_url
         steamid = steamid.replace(STEAM_PROFILE_URL_FOR_PARSE, "")
         return steamid
+    
+    @staticmethod
+    def is_custom_url(URL):
+        to_check = url.lstrip(https://steamcommunity.com/profiles/"").rstrip("") #continue here ____________________________
