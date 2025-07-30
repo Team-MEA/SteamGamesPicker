@@ -41,6 +41,7 @@ class Application:
 
     '''user will provide their steam page url. this method calls the steamAPIScraper to get the users information.
     if main acount is private or url is invalid return None'''
+    # Changed to provide ID and program adds the URL
     def __check_and_set_main_user(self, steam_page_url) -> User:
         pass
 
@@ -51,9 +52,9 @@ class Application:
         self.master_window.configure(background=PRIMARY_COLOR)
 
     def __create_steam_url_frame(self):
-        welcome_text = tk.Label(self.current_frame, text="Please provide your Steam profile URL", font=self.__font_header, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
+        welcome_text = tk.Label(self.current_frame, text="Please provide your Steam ID", font=self.__font_header, bg=PRIMARY_COLOR, fg=THIRDARY_COLOR)
         welcome_text.pack(side=tk.TOP, pady=TITLE_TEXT_PADDING_Y)
-        hyperlink = tk.Label(self.current_frame, text="quick link to steam profile", font=self.__font_style_2,bg=PRIMARY_COLOR ,fg=ACENT_COLOR, cursor="hand2")
+        hyperlink = tk.Label(self.current_frame, text="quick link to steam profile settings", font=self.__font_style_2,bg=PRIMARY_COLOR ,fg=ACENT_COLOR, cursor="hand2")
         hyperlink.pack(pady=LABEL_PADDING_Y)
         hyperlink.bind("<Button-1>", lambda e: webbrowser.open_new(STEAM_PROFILE_URL))
         inputBox = tk.Entry(self.current_frame, width=int(SCREEN_WIDTH/14))
